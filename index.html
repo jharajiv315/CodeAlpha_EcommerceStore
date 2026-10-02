@@ -16,6 +16,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "http://localhost:3000/#organization",
+          "name": "NEXORA",
+          "url": "http://localhost:3000/",
+          "logo": "http://localhost:3000/favicon.svg",
+          "description": "Modern products. Simple shopping. A luxury-minimalist e-commerce platform for everyday essentials, precision gear, and lifestyle products."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "http://localhost:3000/#website",
+          "url": "http://localhost:3000/",
+          "name": "NEXORA",
+          "publisher": {
+            "@id": "http://localhost:3000/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "http://localhost:3000/#/shop?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-[#F7F5F0] text-[#171A19] antialiased selection:bg-[#EDE4D2] selection:text-[#123C35]">
     <div id="root"></div>

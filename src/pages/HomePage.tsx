@@ -126,7 +126,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     />
                     <div className="absolute bottom-4 left-4 right-4 bg-[#FFFFFF]/90 backdrop-blur-xs p-3 rounded-lg border border-[#E4E1DA] flex items-center justify-between">
                       <div>
-                        <h4 className="text-xs font-semibold text-[#171A19]">Nexora Arc Headphones</h4>
+                        <p className="text-xs font-semibold text-[#171A19]">Nexora Arc Headphones</p>
                         <span className="text-xs text-[#123C35] font-bold tabular-nums">₹14,999</span>
                       </div>
                       <span className="text-[11px] font-semibold text-[#123C35] uppercase tracking-wide group-hover/hero:underline flex items-center gap-1">
@@ -241,7 +241,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* SECTION 4 — EDITORIAL BRAND STORY */}
       <section className="bg-[#FFFFFF] border-y border-[#E4E1DA] py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#B89B5E]">
+          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6E2E]">
             The Nexora Philosophy
           </span>
 

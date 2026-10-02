@@ -16,28 +16,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <Truck className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
               <h5 className="text-xs font-semibold uppercase tracking-wider text-[#F7F5F0]">Express Courier</h5>
-              <p className="text-xs text-[#666B67] mt-1">Dispatched within 24 hours across India.</p>
+              <p className="text-xs text-[#A8AEA9] mt-1">Dispatched within 24 hours across India.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
               <h5 className="text-xs font-semibold uppercase tracking-wider text-[#F7F5F0]">Secure Ordering</h5>
-              <p className="text-xs text-[#666B67] mt-1">Encrypted checkout with Cash on Delivery & UPI.</p>
+              <p className="text-xs text-[#A8AEA9] mt-1">Encrypted checkout with Cash on Delivery & UPI.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <RotateCcw className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
               <h5 className="text-xs font-semibold uppercase tracking-wider text-[#F7F5F0]">30-Day Returns</h5>
-              <p className="text-xs text-[#666B67] mt-1">Hassle-free doorstep pickup policy.</p>
+              <p className="text-xs text-[#A8AEA9] mt-1">Hassle-free doorstep pickup policy.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Award className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
               <h5 className="text-xs font-semibold uppercase tracking-wider text-[#F7F5F0]">Authentic Gear</h5>
-              <p className="text-xs text-[#666B67] mt-1">2-year minimum hardware warranty on all devices.</p>
+              <p className="text-xs text-[#A8AEA9] mt-1">2-year minimum hardware warranty on all devices.</p>
             </div>
           </div>
         </div>

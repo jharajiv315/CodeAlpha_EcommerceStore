@@ -157,12 +157,12 @@ export const CartPage: React.FC<CartPageProps> = ({
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-[#123C35]">
                     {product.category}
                   </span>
-                  <h4
+                  <h3
                     onClick={() => onSelectProduct(product.id)}
                     className="text-sm font-semibold text-[#171A19] leading-tight truncate hover:text-[#123C35] cursor-pointer"
                   >
                     {product.name}
-                  </h4>
+                  </h3>
                   <p className="text-xs text-[#666B67] mt-0.5 line-clamp-1">
                     {product.tagline}
                   </p>

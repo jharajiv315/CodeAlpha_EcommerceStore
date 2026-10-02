@@ -9,3 +9,4 @@ coverage/
 !.env.example
 backend/.env*
 !backend/.env.example
+lighthouse_report*.json

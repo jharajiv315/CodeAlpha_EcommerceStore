@@ -13,5 +13,5 @@ Disallow: /orders
 Disallow: /checkout
 Disallow: /auth
 
-# Sitemap reference
-Sitemap: /sitemap.xml
+# Sitemap reference (absolute URL required by robots.txt RFC 9309)
+Sitemap: http://localhost:3000/sitemap.xml

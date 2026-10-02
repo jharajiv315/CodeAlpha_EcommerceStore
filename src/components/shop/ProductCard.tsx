@@ -50,15 +50,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
     <article
       onClick={() => onSelect(product.id)}
       className="group bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35]/35 rounded-xl overflow-hidden flex flex-col transition-all duration-300 ease-out hover:-translate-y-1.5 shadow-xs hover:shadow-xl hover:shadow-[#171A19]/[0.06] cursor-pointer focus-within:ring-2 focus-within:ring-[#123C35]"
-      tabIndex={0}
-      role="button"
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onSelect(product.id);
-        }
-      }}
-      aria-label={`${product.name}, ${formatPrice(product.price)}`}
     >
       {/* Product Image Frame */}
       <div className="relative aspect-[4/3] bg-[#F7F5F0] group-hover:bg-[#F2EEE6] transition-colors duration-300 overflow-hidden flex items-center justify-center p-4">
@@ -126,17 +117,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
         <div>
           {/* Metadata line without pills */}
-          <div className="flex items-center gap-1.5 text-xs text-[#666B67] mb-1">
+          <div className="flex items-center gap-1.5 text-xs text-[#4D524E] mb-1">
             <span>{product.category}</span>
             <span aria-hidden="true">·</span>
             <span>★ {product.rating}</span>
-            <span className="text-[#666B67]/70">({product.reviewCount})</span>
+            <span className="text-[#4D524E]">({product.reviewCount})</span>
           </div>
 
           {/* Product Title */}
-          <h4 className="text-base font-semibold text-[#171A19] leading-snug line-clamp-1 group-hover:text-[#123C35] transition-colors">
-            {product.name}
-          </h4>
+          <h3 className="text-base font-semibold text-[#171A19] leading-snug line-clamp-1 group-hover:text-[#123C35] transition-colors">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(product.id);
+              }}
+              className="text-left hover:underline focus:outline-none cursor-pointer"
+            >
+              {product.name}
+            </button>
+          </h3>
 
           {/* Short tagline */}
           <p className="text-xs text-[#666B67] line-clamp-1 mt-1 font-normal">
