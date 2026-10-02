@@ -13,7 +13,7 @@ class ProductService {
    */
   async getAllProducts(): Promise<Product[]> {
     try {
-      const res = await apiRequest<{ products: Product[]; total: number }>('/products?limit=100');
+      const res = await apiRequest<{ products: Product[]; total: number }>('/products?limit=150');
       return res.products;
     } catch (err) {
       console.warn('[ProductService] Backend offline, using local fallback:', err);
@@ -40,7 +40,7 @@ class ProductService {
    */
   async getFeaturedProducts(): Promise<Product[]> {
     try {
-      return await apiRequest<Product[]>('/products/featured');
+      return await apiRequest<Product[]>('/products/featured?limit=12');
     } catch (err) {
       console.warn('[ProductService] Featured fetch failed, using fallback:', err);
       return INITIAL_PRODUCTS.filter(p => p.featured);
@@ -52,7 +52,7 @@ class ProductService {
    */
   async getNewArrivals(): Promise<Product[]> {
     try {
-      return await apiRequest<Product[]>('/products/new-arrivals');
+      return await apiRequest<Product[]>('/products/new-arrivals?limit=12');
     } catch (err) {
       console.warn('[ProductService] New arrivals fetch failed, using fallback:', err);
       return INITIAL_PRODUCTS.filter(p => p.newArrival);
@@ -66,7 +66,19 @@ class ProductService {
     try {
       return await apiRequest<ProductCategory[]>('/products/categories');
     } catch (err) {
-      return ['Electronics', 'Accessories', 'Gaming', 'Lifestyle'];
+      return [
+        'Smartphones',
+        'Laptops',
+        'Headphones & Audio',
+        'Tablets',
+        'Smartwatches & Wearables',
+        'Cameras',
+        'TVs & Monitors',
+        'Gaming',
+        'PC Components',
+        'Networking & Smart Home',
+        'Accessories',
+      ];
     }
   }
 
@@ -92,6 +104,9 @@ class ProductService {
       if (filters.category && filters.category !== 'All') {
         params.append('category', filters.category);
       }
+      if (filters.brand && filters.brand !== 'All') {
+        params.append('brand', filters.brand);
+      }
       if (filters.searchQuery?.trim()) {
         params.append('search', filters.searchQuery.trim());
       }
@@ -110,7 +125,7 @@ class ProductService {
       if (sort) {
         params.append('sort', sort);
       }
-      params.append('limit', '100');
+      params.append('limit', '150');
 
       const res = await apiRequest<{ products: Product[]; total: number }>(`/products?${params.toString()}`);
       return res.products;

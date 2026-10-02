@@ -10,7 +10,19 @@ interface ShopSidebarFilterProps {
   totalResults: number;
 }
 
-const CATEGORIES: ProductCategory[] = ['Electronics', 'Accessories', 'Gaming', 'Lifestyle'];
+const CATEGORIES: ProductCategory[] = [
+  'Smartphones',
+  'Laptops',
+  'Headphones & Audio',
+  'Tablets',
+  'Smartwatches & Wearables',
+  'Cameras',
+  'TVs & Monitors',
+  'Gaming',
+  'PC Components',
+  'Networking & Smart Home',
+  'Accessories',
+];
 
 const RATING_TIERS = [
   { value: 0, label: 'All Ratings' },
@@ -28,6 +40,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
   // Collapsible section states
   const [openSections, setOpenSections] = useState({
     categories: true,
+    brands: false,
     price: true,
     rating: true,
     availability: true,
@@ -41,6 +54,10 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
     onFilterChange({ ...filters, category });
   };
 
+  const handleBrandSelect = (brand?: string) => {
+    onFilterChange({ ...filters, brand });
+  };
+
   const handleRatingSelect = (rating: number) => {
     onFilterChange({ ...filters, minRating: rating === 0 ? undefined : rating });
   };
@@ -52,8 +69,9 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
   const resetAllFilters = () => {
     onFilterChange({
       category: 'All',
+      brand: undefined,
       minPrice: 0,
-      maxPrice: 100000,
+      maxPrice: 500000,
       inStockOnly: false,
       minRating: undefined,
       searchQuery: '',
@@ -62,8 +80,9 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
 
   const hasActiveFilters =
     filters.category !== 'All' ||
+    Boolean(filters.brand) ||
     filters.minPrice > 0 ||
-    filters.maxPrice < 100000 ||
+    filters.maxPrice < 350000 ||
     filters.inStockOnly ||
     (filters.minRating !== undefined && filters.minRating > 0) ||
     filters.searchQuery.trim().length > 0;
@@ -73,6 +92,13 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
   const inStockCount = allProducts.filter(p => p.stock > 0).length;
   const getCategoryCount = (cat: ProductCategory) => allProducts.filter(p => p.category === cat).length;
   const getRatingCount = (minRate: number) => allProducts.filter(p => p.rating >= minRate).length;
+
+  // Distinct sorted brands
+  const availableBrands = Array.from(
+    new Set(allProducts.map(p => p.brand).filter(Boolean))
+  ).sort() as string[];
+
+  const getBrandCount = (b: string) => allProducts.filter(p => p.brand === b).length;
 
   return (
     <aside className="bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl shadow-xs overflow-hidden divide-y divide-[#E4E1DA]/80">
@@ -127,7 +153,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
             >
               <div className="flex items-center gap-2">
                 <span className={`w-1.5 h-1.5 rounded-full ${filters.category === 'All' ? 'bg-[#FFFFFF]' : 'bg-transparent'}`} />
-                <span>All Disciplines</span>
+                <span>All Electronics</span>
               </div>
               <span className={`text-[11px] tabular-nums ${filters.category === 'All' ? 'text-[#FFFFFF]/80' : 'text-[#666B67]'}`}>
                 {totalCount}
@@ -162,6 +188,66 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
           </div>
         )}
       </div>
+
+      {/* 2. Brand Filter Section */}
+      {availableBrands.length > 0 && (
+        <div className="p-4">
+          <button
+            type="button"
+            onClick={() => toggleSection('brands')}
+            className="w-full flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#171A19] cursor-pointer mb-3"
+            aria-expanded={openSections.brands}
+          >
+            <span>Brand ({filters.brand || 'All'})</span>
+            {openSections.brands ? (
+              <ChevronUp className="w-3.5 h-3.5 text-[#666B67]" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5 text-[#666B67]" />
+            )}
+          </button>
+
+          {openSections.brands && (
+            <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
+              <button
+                type="button"
+                onClick={() => handleBrandSelect(undefined)}
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
+                  !filters.brand
+                    ? 'bg-[#123C35] text-[#FFFFFF] font-semibold'
+                    : 'text-[#171A19] hover:bg-[#F7F5F0]'
+                }`}
+              >
+                <span>All Brands</span>
+                <span className={`text-[11px] tabular-nums ${!filters.brand ? 'text-[#FFFFFF]/80' : 'text-[#666B67]'}`}>
+                  {totalCount}
+                </span>
+              </button>
+
+              {availableBrands.map(brand => {
+                const active = filters.brand === brand;
+                const count = getBrandCount(brand);
+                return (
+                  <button
+                    key={brand}
+                    type="button"
+                    onClick={() => handleBrandSelect(brand)}
+                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
+                      active
+                        ? 'bg-[#123C35] text-[#FFFFFF] font-semibold'
+                        : 'text-[#171A19] hover:bg-[#F7F5F0]'
+                    }`}
+                  >
+                    <span>{brand}</span>
+                    <span className={`text-[11px] tabular-nums ${active ? 'text-[#FFFFFF]/80' : 'text-[#666B67]'}`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 2. Price Range Slider Section */}
       <div className="p-4">
@@ -283,7 +369,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
 
             <div className="flex items-center gap-1.5 px-2 text-[11px] text-[#666B67]">
               <ShieldCheck className="w-3 h-3 text-[#123C35]" />
-              <span>Ships within 24 hours from Tokyo</span>
+              <span>Ships within 24 hours with express delivery</span>
             </div>
           </div>
         )}

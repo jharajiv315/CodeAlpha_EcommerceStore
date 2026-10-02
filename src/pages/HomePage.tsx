@@ -3,9 +3,20 @@ import { productService } from '../services/productService';
 import { Product, ProductCategory } from '../types';
 import { ProductCard } from '../components/shop/ProductCard';
 import { ProductGridSkeleton } from '../components/common/SkeletonLoader';
-import { ArrowRight, Sparkles, Compass, Shield, Headphones, Laptop, Gamepad2, Coffee } from 'lucide-react';
+import {
+  ArrowRight,
+  Compass,
+  Headphones,
+  Laptop,
+  Gamepad2,
+  Smartphone,
+  Tv,
+  Cpu,
+  Camera,
+  Home,
+  CheckCircle2,
+} from 'lucide-react';
 import { formatPrice } from '../utils/currency';
-import { productImages } from '../data/productImages';
 
 interface HomePageProps {
   onNavigate: (route: string, category?: ProductCategory) => void;
@@ -18,24 +29,40 @@ export const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+  const [spotlightProduct, setSpotlightProduct] = useState<Product | null>(null);
+  const [totalProducts, setTotalProducts] = useState(108);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       productService.getFeaturedProducts(),
       productService.getNewArrivals(),
-    ]).then(([featured, arrivals]) => {
+      productService.getAllProducts(),
+    ]).then(([featured, arrivals, all]) => {
       setFeaturedProducts(featured.slice(0, 4));
       setNewArrivals(arrivals.slice(0, 4));
+      setTotalProducts(all.length);
+      // Pick a flagship spotlight product
+      const spotlight =
+        featured.find(p => p.id === 'sony-wh-1000xm5') ||
+        featured.find(p => p.id === 'apple-iphone-16-pro-max') ||
+        featured[0] ||
+        all[0] ||
+        null;
+      setSpotlightProduct(spotlight);
       setIsLoading(false);
     });
   }, []);
 
   const categories: { name: ProductCategory; icon: any; desc: string; count: string }[] = [
-    { name: 'Electronics', icon: Headphones, desc: 'Acoustic monitors, planar headphones & precision audio', count: '5 products' },
-    { name: 'Accessories', icon: Laptop, desc: 'Machined aluminum docks, stands & leather sleeves', count: '5 products' },
-    { name: 'Gaming', icon: Gamepad2, desc: 'Hall-effect controllers, glass pads & tactile keypads', count: '4 products' },
-    { name: 'Lifestyle', icon: Coffee, desc: 'Ceramic thermal flasks, task lighting & wool mats', count: '4 products' },
+    { name: 'Smartphones', icon: Smartphone, desc: 'Flagship 5G devices from Apple, Samsung, Google & OnePlus', count: '12+ models' },
+    { name: 'Laptops', icon: Laptop, desc: 'M3 MacBooks, Dell XPS workstations & ROG gaming rigs', count: '12+ models' },
+    { name: 'Headphones & Audio', icon: Headphones, desc: 'Sony WH-series, AirPods Max & audiophile monitors', count: '12+ models' },
+    { name: 'TVs & Monitors', icon: Tv, desc: 'LG OLED evo, Samsung Neo QLED & ROG gaming displays', count: '10+ models' },
+    { name: 'Gaming', icon: Gamepad2, desc: 'PlayStation 5, Xbox Series X, Nintendo & Razer peripherals', count: '10+ models' },
+    { name: 'PC Components', icon: Cpu, desc: 'NVIDIA RTX 40-series, AMD Ryzen 7800X3D & Samsung SSDs', count: '10+ models' },
+    { name: 'Cameras', icon: Camera, desc: 'Sony Alpha, Canon EOS R, Nikon Z & DJI Osmo Pocket 3', count: '8+ models' },
+    { name: 'Networking & Smart Home', icon: Home, desc: 'Wi-Fi 7 mesh routers, Google Nest & Philips Hue systems', count: '8+ models' },
   ];
 
   return (
@@ -47,15 +74,15 @@ export const HomePage: React.FC<HomePageProps> = ({
             {/* Left Content Column */}
             <div className="lg:col-span-6 space-y-6 sm:space-y-8">
               <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#123C35] bg-[#EDE4D2] px-3 py-1 rounded-sm">
-                <span>The 2026 Collection</span>
+                <span>The 2026 Electronics Collection</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#171A19] leading-[1.08] text-balance">
-                Designed for the way you live.
+                Engineered for the way you live.
               </h1>
 
               <p className="text-base sm:text-lg text-[#666B67] leading-relaxed max-w-xl font-normal">
-                Thoughtfully selected products built for everyday performance, comfort, and style. Stripped of noise, engineered for longevity.
+                Authentic flagship electronics from the world's finest engineering brands. Apple, Sony, Samsung, NVIDIA, Bose, and Dell — curated with transparent Indian retail pricing and official warranty.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
@@ -89,13 +116,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
                 <div className="h-6 w-[1px] bg-[#E4E1DA]" />
                 <div>
-                  <strong className="text-[#171A19] font-semibold block text-sm">2-Year</strong>
-                  <span>Hardware warranty</span>
+                  <strong className="text-[#171A19] font-semibold block text-sm">Official</strong>
+                  <span>Brand India warranty</span>
                 </div>
                 <div className="h-6 w-[1px] bg-[#E4E1DA] hidden sm:block" />
                 <div className="hidden sm:block">
-                  <strong className="text-[#171A19] font-semibold block text-sm">30-Day</strong>
-                  <span>Hassle-free returns</span>
+                  <strong className="text-[#171A19] font-semibold block text-sm">100%</strong>
+                  <span>Authentic products</span>
                 </div>
               </div>
             </div>
@@ -106,30 +133,40 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {/* Visual Label */}
                 <div className="flex items-center justify-between pb-6 border-b border-[#E4E1DA]">
                   <span className="text-xs uppercase tracking-widest font-semibold text-[#123C35]">
-                    Spotlight Instrument
+                    Spotlight Product
                   </span>
                   <span className="text-xs font-medium text-[#666B67]">
-                    Planar Magnetic Acoustic
+                    {spotlightProduct?.brand || 'Sony'} Flagship
                   </span>
                 </div>
 
                 {/* Hero Showcase Product */}
                 <div className="py-6 flex items-center justify-center">
                   <div
-                    onClick={() => onSelectProduct('nexora-arc-headphones')}
+                    onClick={() => {
+                      if (spotlightProduct) onSelectProduct(spotlightProduct.id);
+                    }}
                     className="group/hero cursor-pointer relative w-full max-w-sm aspect-square bg-[#F7F5F0] rounded-xl p-6 flex flex-col items-center justify-center transition-all duration-300 hover:border-[#123C35]"
                   >
                     <img
-                      src={featuredProducts[0]?.image || productImages.arcHeadphones.main}
-                      alt="Nexora Arc Headphones"
+                      src={
+                        spotlightProduct?.image ||
+                        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80'
+                      }
+                      alt={spotlightProduct?.name || 'Flagship Electronics'}
                       className="w-full h-full object-contain transition-transform duration-300 group-hover/hero:scale-105"
+                      loading="eager"
                     />
-                    <div className="absolute bottom-4 left-4 right-4 bg-[#FFFFFF]/90 backdrop-blur-xs p-3 rounded-lg border border-[#E4E1DA] flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-semibold text-[#171A19]">Nexora Arc Headphones</p>
-                        <span className="text-xs text-[#123C35] font-bold tabular-nums">₹14,999</span>
+                    <div className="absolute bottom-4 left-4 right-4 bg-[#FFFFFF]/95 backdrop-blur-xs p-3 rounded-lg border border-[#E4E1DA] flex items-center justify-between shadow-xs">
+                      <div className="truncate mr-2">
+                        <p className="text-xs font-semibold text-[#171A19] truncate">
+                          {spotlightProduct?.name || 'Sony WH-1000XM5 Wireless Headphones'}
+                        </p>
+                        <span className="text-xs text-[#123C35] font-bold tabular-nums">
+                          {spotlightProduct ? formatPrice(spotlightProduct.price) : '₹27,990'}
+                        </span>
                       </div>
-                      <span className="text-[11px] font-semibold text-[#123C35] uppercase tracking-wide group-hover/hero:underline flex items-center gap-1">
+                      <span className="text-[11px] font-semibold text-[#123C35] uppercase tracking-wide group-hover/hero:underline flex items-center gap-1 shrink-0">
                         View Details →
                       </span>
                     </div>
@@ -138,8 +175,13 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                 {/* Subtle Editorial Accent Note */}
                 <div className="pt-4 border-t border-[#E4E1DA] flex items-center justify-between text-xs text-[#666B67]">
-                  <span>Titanium & deep-emerald unibody</span>
-                  <span className="text-[#123C35] font-medium">In stock · Dispatches tomorrow</span>
+                  <span className="truncate max-w-[60%]">
+                    {spotlightProduct?.tagline || 'Industry-leading noise cancellation'}
+                  </span>
+                  <span className="text-[#123C35] font-medium flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    In stock · Express dispatch
+                  </span>
                 </div>
               </div>
             </div>
@@ -152,10 +194,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-[#171A19] tracking-tight">
-              Curated Disciplines
+              Featured Categories
             </h2>
             <p className="text-xs sm:text-sm text-[#666B67] mt-1">
-              Select a category to browse precision tools built for your focus.
+              Browse genuine consumer electronics engineered by industry leaders.
             </p>
           </div>
           <button
@@ -163,7 +205,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => onNavigate('shop')}
             className="text-xs font-semibold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1.5 cursor-pointer underline underline-offset-4"
           >
-            <span>View all 18 products</span>
+            <span>View all {totalProducts} products</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

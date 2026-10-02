@@ -21,7 +21,7 @@ async function verifyDatabaseIntegrity() {
   // 1. Initial State Snapshot
   const initialOrders = parseInt((await query('SELECT count(*) FROM orders')).rows[0].count);
   const initialItems = parseInt((await query('SELECT count(*) FROM order_items')).rows[0].count);
-  const initialStockRes = await query("SELECT stock FROM products WHERE id = 'nexora-arc-headphones'");
+  const initialStockRes = await query("SELECT stock FROM products WHERE id = 'sony-wh-1000xm5'");
   const initialStock = parseInt(initialStockRes.rows[0].stock);
 
   console.log('[Snapshot 1 - Initial DB State]:');
@@ -35,7 +35,7 @@ async function verifyDatabaseIntegrity() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      items: [{ productId: 'nexora-arc-headphones', quantity: 1 }],
+      items: [{ productId: 'sony-wh-1000xm5', quantity: 1 }],
       shippingAddress: {
         fullName: 'Anonymous Guest',
         email: 'guest@attacker.com',
@@ -56,7 +56,7 @@ async function verifyDatabaseIntegrity() {
   // 3. Post-Guest DB State Verification
   const postGuestOrders = parseInt((await query('SELECT count(*) FROM orders')).rows[0].count);
   const postGuestItems = parseInt((await query('SELECT count(*) FROM order_items')).rows[0].count);
-  const postGuestStockRes = await query("SELECT stock FROM products WHERE id = 'nexora-arc-headphones'");
+  const postGuestStockRes = await query("SELECT stock FROM products WHERE id = 'sony-wh-1000xm5'");
   const postGuestStock = parseInt(postGuestStockRes.rows[0].stock);
 
   console.log('\n[Snapshot 2 - Post-Guest Attempt DB State]:');
@@ -84,7 +84,7 @@ async function verifyDatabaseIntegrity() {
       'Authorization': `Bearer ${authA.session.access_token}`
     },
     body: JSON.stringify({
-      items: [{ productId: 'nexora-arc-headphones', quantity: 1 }],
+      items: [{ productId: 'sony-wh-1000xm5', quantity: 1 }],
       shippingAddress: {
         fullName: 'Alex Morgan',
         email: 'alex@nexora.design',
@@ -107,7 +107,7 @@ async function verifyDatabaseIntegrity() {
   // 5. Post-Authenticated DB State Verification
   const postAuthOrders = parseInt((await query('SELECT count(*) FROM orders')).rows[0].count);
   const postAuthItems = parseInt((await query('SELECT count(*) FROM order_items')).rows[0].count);
-  const postAuthStockRes = await query("SELECT stock FROM products WHERE id = 'nexora-arc-headphones'");
+  const postAuthStockRes = await query("SELECT stock FROM products WHERE id = 'sony-wh-1000xm5'");
   const postAuthStock = parseInt(postAuthStockRes.rows[0].stock);
 
   console.log('\n[Snapshot 3 - Post-Authenticated Order DB State]:');

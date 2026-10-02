@@ -14,10 +14,11 @@ interface NavbarProps {
 
 const NAV_LINKS: { label: string; category?: ProductCategory }[] = [
   { label: 'All Products' },
-  { label: 'Electronics', category: 'Electronics' },
-  { label: 'Accessories', category: 'Accessories' },
+  { label: 'Smartphones', category: 'Smartphones' },
+  { label: 'Laptops', category: 'Laptops' },
+  { label: 'Audio', category: 'Headphones & Audio' },
+  { label: 'TVs & Monitors', category: 'TVs & Monitors' },
   { label: 'Gaming', category: 'Gaming' },
-  { label: 'Lifestyle', category: 'Lifestyle' },
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({

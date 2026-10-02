@@ -16,15 +16,15 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
   minPrice,
   maxPrice,
   minLimit = 0,
-  maxLimit = 30000,
-  step = 500,
+  maxLimit = 350000,
+  step = 1000,
   onChange,
   compact = false,
 }) => {
   const minInputId = useId();
   const maxInputId = useId();
 
-  // Normalize maxPrice if unbounded (e.g. 100000)
+  // Normalize maxPrice if unbounded (e.g. 500000)
   const isUnbounded = maxPrice >= maxLimit;
   const currentMax = isUnbounded ? maxLimit : maxPrice;
   const currentMin = Math.max(minLimit, minPrice);
@@ -37,21 +37,21 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Number(e.target.value), currentMax - step);
-    onChange(value, isUnbounded ? 100000 : currentMax);
+    onChange(value, isUnbounded ? 500000 : currentMax);
   };
 
   const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     const value = Math.max(val, currentMin + step);
-    // If user dragged to max edge, treat as unbounded (100000) so no high items are cut off
-    onChange(currentMin, value >= maxLimit ? 100000 : value);
+    // If user dragged to max edge, treat as unbounded (500000) so no high items are cut off
+    onChange(currentMin, value >= maxLimit ? 500000 : value);
   };
 
   const handleManualMin = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value.replace(/\D/g, ''));
     if (!isNaN(num)) {
       const clamped = Math.min(Math.max(minLimit, num), currentMax - step);
-      onChange(clamped, isUnbounded ? 100000 : currentMax);
+      onChange(clamped, isUnbounded ? 500000 : currentMax);
     }
   };
 
@@ -59,12 +59,12 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
     const num = Number(e.target.value.replace(/\D/g, ''));
     if (!isNaN(num)) {
       const clamped = Math.max(num, currentMin + step);
-      onChange(currentMin, clamped >= maxLimit ? 100000 : clamped);
+      onChange(currentMin, clamped >= maxLimit ? 500000 : clamped);
     }
   };
 
   const resetPrice = () => {
-    onChange(minLimit, 100000);
+    onChange(minLimit, 500000);
   };
 
   const isFiltered = currentMin > minLimit || !isUnbounded;

@@ -3,9 +3,10 @@ import { sendSuccess, sendError } from '../utils/apiResponse.js';
 
 export const getProducts = async (req, res, next) => {
   try {
-    const { category, search, minPrice, maxPrice, inStockOnly, minRating, sort, page, limit } = req.query;
+    const { category, brand, search, minPrice, maxPrice, inStockOnly, minRating, sort, page, limit } = req.query;
     const result = await productService.getProducts({
       category,
+      brand,
       search,
       minPrice,
       maxPrice,

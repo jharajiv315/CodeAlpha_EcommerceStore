@@ -11,7 +11,19 @@ interface MobileDrawerProps {
   currentRoute: string;
 }
 
-const CATEGORIES: ProductCategory[] = ['Electronics', 'Accessories', 'Gaming', 'Lifestyle'];
+const CATEGORIES: ProductCategory[] = [
+  'Smartphones',
+  'Laptops',
+  'Headphones & Audio',
+  'Tablets',
+  'Smartwatches & Wearables',
+  'Cameras',
+  'TVs & Monitors',
+  'Gaming',
+  'PC Components',
+  'Networking & Smart Home',
+  'Accessories',
+];
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,

@@ -15,7 +15,20 @@ interface FilterBarProps {
   onToggleSidebar?: () => void;
 }
 
-const CATEGORIES: (ProductCategory | 'All')[] = ['All', 'Electronics', 'Accessories', 'Gaming', 'Lifestyle'];
+const CATEGORIES: (ProductCategory | 'All')[] = [
+  'All',
+  'Smartphones',
+  'Laptops',
+  'Headphones & Audio',
+  'Tablets',
+  'Smartwatches & Wearables',
+  'Cameras',
+  'TVs & Monitors',
+  'Gaming',
+  'PC Components',
+  'Networking & Smart Home',
+  'Accessories',
+];
 
 const RATING_OPTIONS = [
   { value: 0, label: 'All Ratings' },
@@ -81,8 +94,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const resetAllFilters = () => {
     onFilterChange({
       category: 'All',
+      brand: undefined,
       minPrice: 0,
-      maxPrice: 100000,
+      maxPrice: 500000,
       inStockOnly: false,
       minRating: undefined,
       searchQuery: '',
@@ -92,8 +106,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
   const hasActiveFilters =
     filters.category !== 'All' ||
+    Boolean(filters.brand) ||
     filters.minPrice > 0 ||
-    filters.maxPrice < 100000 ||
+    filters.maxPrice < 350000 ||
     filters.inStockOnly ||
     (filters.minRating !== undefined && filters.minRating > 0) ||
     filters.searchQuery.trim().length > 0;
@@ -109,7 +124,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             type="text"
             value={filters.searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search headphones, keyboards, desk accessories..."
+            placeholder="Search iPhone, MacBook, Sony, OLED, RTX, Galaxy..."
             className="w-full bg-[#FFFFFF] border border-[#E4E1DA] focus:border-[#123C35] rounded-lg pl-10 pr-9 py-2.5 text-sm text-[#171A19] placeholder:text-[#666B67]/70 transition-colors"
           />
           {filters.searchQuery && (
@@ -217,7 +232,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 setRatingDropdownOpen(false);
               }}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all cursor-pointer select-none ${
-                filters.minPrice > 0 || filters.maxPrice < 100000
+                filters.minPrice > 0 || filters.maxPrice < 350000
                   ? 'bg-[#EDE4D2] border-[#123C35] text-[#123C35] font-semibold'
                   : 'bg-[#FFFFFF] border-[#E4E1DA] text-[#171A19] hover:border-[#171A19]/40'
               }`}
@@ -225,8 +240,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               aria-haspopup="true"
             >
               <span>
-                {filters.minPrice > 0 || filters.maxPrice < 100000
-                  ? `Price: ${formatPrice(filters.minPrice)} – ${filters.maxPrice >= 30000 ? '₹30k+' : formatPrice(filters.maxPrice)}`
+                {filters.minPrice > 0 || filters.maxPrice < 350000
+                  ? `Price: ${formatPrice(filters.minPrice)} – ${filters.maxPrice >= 350000 ? '₹350k+' : formatPrice(filters.maxPrice)}`
                   : 'Price'}
               </span>
               {priceDropdownOpen ? (

@@ -101,17 +101,17 @@ async function runTests() {
   console.log('\n--- 3. Testing Products Catalog API ---');
   {
     const listRes = await request('/products');
-    assert(listRes.status === 200 && listRes.data.data.products.length === 18, 'GET /api/products returns all 18 PostgreSQL products');
+    assert(listRes.status === 200 && listRes.data.data.products.length >= 80, 'GET /api/products returns real-world PostgreSQL catalog');
 
-    const catRes = await request('/products?category=Electronics');
-    const allElectronics = catRes.data.data.products.every(p => p.category === 'Electronics');
-    assert(catRes.status === 200 && allElectronics && catRes.data.data.products.length > 0, 'Category filtering works');
+    const catRes = await request('/products?category=Smartphones');
+    const allSmartphones = catRes.data.data.products.every(p => p.category === 'Smartphones');
+    assert(catRes.status === 200 && allSmartphones && catRes.data.data.products.length >= 12, 'Category filtering works');
 
-    const searchRes = await request('/products?search=headphones');
-    assert(searchRes.status === 200 && searchRes.data.data.products.some(p => p.id === 'nexora-arc-headphones'), 'Instant search returns matches');
+    const searchRes = await request('/products?search=sony');
+    assert(searchRes.status === 200 && searchRes.data.data.products.some(p => p.id === 'sony-wh-1000xm5'), 'Instant search returns matches');
 
-    const detailRes = await request('/products/nexora-arc-headphones');
-    assert(detailRes.status === 200 && detailRes.data.data.name === 'Nexora Arc Wireless Headphones', 'Product detail loaded with specs & gallery');
+    const detailRes = await request('/products/sony-wh-1000xm5');
+    assert(detailRes.status === 200 && detailRes.data.data.name.includes('Sony WH-1000XM5'), 'Product detail loaded with specs & gallery');
 
     const notFoundRes = await request('/products/invalid-instrument-id');
     assert(notFoundRes.status === 404, 'Non-existent product returns 404');
@@ -120,12 +120,12 @@ async function runTests() {
   console.log('\n--- 4. Testing Transactional Orders with Supabase Identity ---');
   let placedOrderNumber = '';
   {
-    const beforeProduct = await request('/products/nexora-arc-headphones');
+    const beforeProduct = await request('/products/sony-wh-1000xm5');
     const initialStock = beforeProduct.data.data.stock;
 
     const orderPayload = {
       items: [
-        { productId: 'nexora-arc-headphones', quantity: 1 }
+        { productId: 'sony-wh-1000xm5', quantity: 1 }
       ],
       shippingAddress: {
         fullName: 'Alex Morgan',
@@ -163,11 +163,11 @@ async function runTests() {
     const created = orderRes.data.data;
     placedOrderNumber = created.id;
     assert(created.userId === authenticatedUserId, 'Order linked to canonical Supabase Auth UUID, ignoring spoofed client userId');
-    assert(created.items[0].price === 14999, 'Server-authoritative price applied');
-    assert(created.discount === 1500, 'Server-authoritative 10% discount applied');
+    assert(created.items[0].price === 27990, 'Server-authoritative price applied');
+    assert(created.discount === 2799, 'Server-authoritative 10% discount applied');
 
     // Stock verification
-    const afterProduct = await request('/products/nexora-arc-headphones');
+    const afterProduct = await request('/products/sony-wh-1000xm5');
     assert(afterProduct.data.data.stock === initialStock - 1, `Inventory atomically decremented: ${initialStock} -> ${afterProduct.data.data.stock}`);
 
     // Insufficient stock rejection
@@ -175,7 +175,7 @@ async function runTests() {
       method: 'POST',
       headers: { Authorization: `Bearer ${supabaseAccessToken}` },
       body: {
-        items: [{ productId: 'nexora-arc-headphones', quantity: 9999 }],
+        items: [{ productId: 'sony-wh-1000xm5', quantity: 9999 }],
         shippingAddress: orderPayload.shippingAddress,
       },
     });

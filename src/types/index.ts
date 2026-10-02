@@ -3,7 +3,18 @@
  * Modern products. Simple shopping.
  */
 
-export type ProductCategory = 'Electronics' | 'Accessories' | 'Gaming' | 'Lifestyle';
+export type ProductCategory =
+  | 'Smartphones'
+  | 'Laptops'
+  | 'Headphones & Audio'
+  | 'Tablets'
+  | 'Smartwatches & Wearables'
+  | 'Cameras'
+  | 'TVs & Monitors'
+  | 'Gaming'
+  | 'PC Components'
+  | 'Networking & Smart Home'
+  | 'Accessories';
 
 export interface Product {
   id: string;
@@ -14,6 +25,8 @@ export interface Product {
   price: number;
   originalPrice?: number;
   category: ProductCategory;
+  brand?: string;
+  sku?: string;
   image: string;
   gallery: string[];
   stock: number;
@@ -100,6 +113,7 @@ export interface User {
 
 export interface ProductFilterState {
   category: ProductCategory | 'All';
+  brand?: string;
   minPrice: number;
   maxPrice: number;
   inStockOnly: boolean;

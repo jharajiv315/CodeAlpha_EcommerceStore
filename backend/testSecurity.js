@@ -95,7 +95,7 @@ async function runSecurityAudit() {
   assert(userAId !== userBId, 'User A and User B are distinct Supabase accounts');
 
   const orderPayloadSample = {
-    items: [{ productId: 'nexora-arc-headphones', quantity: 1 }],
+    items: [{ productId: 'sony-wh-1000xm5', quantity: 1 }],
     shippingAddress: {
       fullName: 'Alex Morgan',
       email: 'alex@nexora.design',

@@ -14,6 +14,8 @@ export const mapProductRow = (row) => {
     price: Number(row.price),
     originalPrice: row.original_price ? Number(row.original_price) : undefined,
     category: row.category,
+    brand: row.brand || undefined,
+    sku: row.sku || undefined,
     image: row.image_url,
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
     stock: Number(row.stock),
@@ -38,6 +40,7 @@ class ProductService {
   async getProducts(filters = {}) {
     const {
       category,
+      brand,
       search,
       minPrice,
       maxPrice,
@@ -45,7 +48,7 @@ class ProductService {
       minRating,
       sort,
       page = 1,
-      limit = 50, // generous default so frontend can fetch full catalog when needed
+      limit = 120, // generous default so catalog displays comprehensively
     } = filters;
 
     const conditions = [];
@@ -58,10 +61,16 @@ class ProductService {
       values.push(category);
     }
 
-    // Search query
+    // Brand filter
+    if (brand && brand !== 'All') {
+      conditions.push(`LOWER(brand) = LOWER($${idx++})`);
+      values.push(brand);
+    }
+
+    // Search query across name, brand, SKU, tagline, description, category
     if (search && search.trim()) {
       const q = `%${search.trim().toLowerCase()}%`;
-      conditions.push(`(LOWER(name) LIKE $${idx} OR LOWER(tagline) LIKE $${idx} OR LOWER(description) LIKE $${idx} OR LOWER(category) LIKE $${idx})`);
+      conditions.push(`(LOWER(name) LIKE $${idx} OR LOWER(COALESCE(brand, '')) LIKE $${idx} OR LOWER(COALESCE(sku, '')) LIKE $${idx} OR LOWER(tagline) LIKE $${idx} OR LOWER(description) LIKE $${idx} OR LOWER(category) LIKE $${idx})`);
       values.push(q);
       idx++;
     }
@@ -116,7 +125,7 @@ class ProductService {
     const total = parseInt(countRes.rows[0].total, 10);
 
     // Pagination
-    const numLimit = Math.max(1, Math.min(100, Number(limit) || 50));
+    const numLimit = Math.max(1, Math.min(200, Number(limit) || 120));
     const numPage = Math.max(1, Number(page) || 1);
     const offset = (numPage - 1) * numLimit;
 

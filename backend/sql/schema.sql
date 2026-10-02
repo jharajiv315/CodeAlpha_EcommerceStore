@@ -44,6 +44,8 @@ CREATE TABLE products (
     price NUMERIC(12, 2) NOT NULL CHECK (price >= 0),
     original_price NUMERIC(12, 2),
     category VARCHAR(64) NOT NULL,
+    brand VARCHAR(64),
+    sku VARCHAR(64) UNIQUE,
     image_url TEXT NOT NULL,
     gallery JSONB DEFAULT '[]'::jsonb,
     stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),

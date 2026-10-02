@@ -78,19 +78,37 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   type="button"
-                  onClick={() => onNavigate('shop', 'Electronics')}
+                  onClick={() => onNavigate('shop', 'Smartphones')}
                   className="hover:text-[#FFFFFF] transition-colors cursor-pointer"
                 >
-                  Electronics
+                  Smartphones
                 </button>
               </li>
               <li>
                 <button
                   type="button"
-                  onClick={() => onNavigate('shop', 'Accessories')}
+                  onClick={() => onNavigate('shop', 'Laptops')}
                   className="hover:text-[#FFFFFF] transition-colors cursor-pointer"
                 >
-                  Accessories
+                  Laptops
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('shop', 'Headphones & Audio')}
+                  className="hover:text-[#FFFFFF] transition-colors cursor-pointer"
+                >
+                  Headphones & Audio
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('shop', 'TVs & Monitors')}
+                  className="hover:text-[#FFFFFF] transition-colors cursor-pointer"
+                >
+                  TVs & Monitors
                 </button>
               </li>
               <li>
@@ -105,10 +123,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   type="button"
-                  onClick={() => onNavigate('shop', 'Lifestyle')}
+                  onClick={() => onNavigate('shop', 'PC Components')}
                   className="hover:text-[#FFFFFF] transition-colors cursor-pointer"
                 >
-                  Lifestyle
+                  PC Components
                 </button>
               </li>
             </ul>
