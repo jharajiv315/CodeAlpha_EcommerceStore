@@ -1,0 +1,42 @@
+name: NEXORA Continuous Integration & Security Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-and-test:
+    name: Lint, Audit, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: Run Frontend Typecheck & Lint
+        run: npm run lint
+
+      - name: Run Frontend Dependency Security Audit
+        run: npm audit --audit-level=high
+
+      - name: Build Frontend Production Bundle
+        run: npm run build
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run Backend Dependency Security Audit
+        working-directory: ./backend
+        run: npm audit --audit-level=high
