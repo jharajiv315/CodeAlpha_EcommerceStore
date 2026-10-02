@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 import { authService } from '../services/authService';
 import { User } from '../types';
 import { useToast } from './ToastContext';
@@ -11,6 +12,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
   wishlist: string[];
@@ -26,10 +28,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [wishlist, setWishlist] = useState<string[]>([]);
   const { addToast } = useToast();
 
-  useEffect(() => {
-    // Load session user
-    authService.getCurrentUser().then(activeUser => {
+  const loadUserProfile = useCallback(async () => {
+    try {
+      const activeUser = await authService.getCurrentUser();
       setUser(activeUser);
+    } catch {
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Initial profile load
+    loadUserProfile();
+
+    // Subscribe to Supabase session state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        if (session?.user) {
+          const profile = await authService.getCurrentUser();
+          setUser(profile);
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
       setIsLoading(false);
     });
 
@@ -42,7 +65,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch {
       // Storage unavailable
     }
-  }, []);
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [loadUserProfile]);
 
   const login = useCallback(async (email: string, password: string) => {
     try {
@@ -57,11 +84,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = useCallback(async (name: string, email: string, password: string) => {
     try {
-      const registered = await authService.register({ name, email, password });
-      setUser(registered);
-      addToast(`Account created`, 'success', `Welcome to Nexora, ${registered.name}`);
+      const { user: registered, requiresEmailConfirmation } = await authService.register({
+        name,
+        email,
+        password,
+      });
+
+      if (requiresEmailConfirmation) {
+        addToast(
+          'Verification email sent',
+          'info',
+          'Please verify your email address to complete your account setup.'
+        );
+      } else {
+        setUser(registered);
+        addToast(`Account created`, 'success', `Welcome to Nexora, ${registered.name}`);
+      }
     } catch (err: any) {
       addToast('Registration failed', 'error', err.message || 'Please try again');
+      throw err;
+    }
+  }, [addToast]);
+
+  const loginWithGoogle = useCallback(async () => {
+    try {
+      await authService.signInWithGoogle();
+    } catch (err: any) {
+      addToast('Google sign-in failed', 'error', err.message);
       throw err;
     }
   }, [addToast]);
@@ -115,6 +164,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         register,
+        loginWithGoogle,
         logout,
         updateProfile,
         wishlist,

@@ -176,7 +176,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
                         : 'border-[#E4E1DA] hover:border-[#171A19]/30'
                     }`}
                   >
-                    <img src={imgUrl} alt="" className="w-full h-full object-contain" />
+                    <img src={imgUrl} alt={`${product.name} preview ${idx + 1}`} className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>
@@ -250,13 +250,13 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
               </div>
 
               {/* Compact Highlights */}
-              {product.highlights && product.highlights.length > 0 && (
+              {product.features && product.features.length > 0 && (
                 <div className="pt-2">
                   <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#666B67] mb-2">
                     Key Highlights
                   </h4>
                   <ul className="text-xs text-[#171A19] space-y-1.5">
-                    {product.highlights.slice(0, 3).map((item, idx) => (
+                    {product.features.slice(0, 3).map((item: string, idx: number) => (
                       <li key={idx} className="flex items-center gap-2">
                         <span className="w-1 h-1 rounded-full bg-[#123C35] shrink-0" />
                         <span className="line-clamp-1">{item}</span>

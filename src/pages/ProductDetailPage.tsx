@@ -173,7 +173,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   }`}
                   aria-label={`View angle ${idx + 1}`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-contain" />
+                  <img src={img} alt={`${product.name} angle ${idx + 1}`} className="w-full h-full object-contain" />
                 </button>
               ))}
             </div>

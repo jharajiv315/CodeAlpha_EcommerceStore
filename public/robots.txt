@@ -1,0 +1,17 @@
+# ========================================================
+# NEXORA Search Engine Crawling Policy
+# ========================================================
+
+User-agent: *
+Allow: /
+Allow: /shop
+Allow: /product/
+
+# Private and transactional routes - prevent indexing
+Disallow: /profile
+Disallow: /orders
+Disallow: /checkout
+Disallow: /auth
+
+# Sitemap reference
+Sitemap: /sitemap.xml

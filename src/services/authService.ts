@@ -1,131 +1,87 @@
+import { supabase } from '../lib/supabase';
+import { apiRequest } from './apiClient';
 import { ShippingAddress, User } from '../types';
 
-const AUTH_USER_KEY = 'nexora_auth_user_v1';
-const REGISTERED_USERS_KEY = 'nexora_registered_users_v1';
-
-interface StoredAccount {
+export interface RegisterResult {
   user: User;
-  passwordHash: string; // Simulated hash for prototype
+  requiresEmailConfirmation: boolean;
 }
 
-const DEFAULT_ACCOUNTS: StoredAccount[] = [
-  {
-    user: {
-      id: 'usr_alex_01',
-      name: 'Alex Morgan',
-      email: 'alex@nexora.design',
-      joinedDate: 'January 2026',
-      savedAddresses: [
-        {
-          fullName: 'Alex Morgan',
-          email: 'alex@nexora.design',
-          phone: '+91 98765 43210',
-          addressLine: 'Flat 402, Signature Pavilion, 12th Main Indiranagar',
-          city: 'Bengaluru',
-          state: 'Karnataka',
-          postalCode: '560038',
-          country: 'India',
-        }
-      ]
-    },
-    passwordHash: 'password123',
-  },
-  {
-    user: {
-      id: 'usr_priya_02',
-      name: 'Priya Sharma',
-      email: 'priya@nexora.design',
-      joinedDate: 'February 2026',
-      savedAddresses: [
-        {
-          fullName: 'Priya Sharma',
-          email: 'priya@nexora.design',
-          phone: '+91 98111 22334',
-          addressLine: 'Apt 12B, Ocean Crest, Perry Cross Rd, Bandra West',
-          city: 'Mumbai',
-          state: 'Maharashtra',
-          postalCode: '400050',
-          country: 'India',
-        }
-      ]
-    },
-    passwordHash: 'password123',
-  }
-];
-
 class AuthService {
-  private loadAccounts(): StoredAccount[] {
-    try {
-      const data = localStorage.getItem(REGISTERED_USERS_KEY);
-      if (!data) {
-        this.saveAccounts(DEFAULT_ACCOUNTS);
-        return [...DEFAULT_ACCOUNTS];
-      }
-      return JSON.parse(data);
-    } catch {
-      return [...DEFAULT_ACCOUNTS];
-    }
-  }
+  /**
+   * Translates Supabase error codes and messages into polished, user-friendly copy
+   */
+  private formatAuthError(err: any): Error {
+    const rawMsg = err?.message || '';
 
-  private saveAccounts(accounts: StoredAccount[]): void {
-    try {
-      localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(accounts));
-    } catch {
-      // Storage unavailable
+    if (rawMsg.includes('Invalid login credentials')) {
+      return new Error('Your email or password is incorrect.');
     }
+    if (rawMsg.includes('User already registered') || rawMsg.includes('already registered')) {
+      return new Error('An account with this email already exists. Please sign in.');
+    }
+    if (rawMsg.includes('Email not confirmed')) {
+      return new Error('Please verify your email address before signing in.');
+    }
+    if (rawMsg.includes('Password should be at least')) {
+      return new Error('Password must be at least 6 characters long.');
+    }
+    if (rawMsg.includes('rate limit')) {
+      return new Error('Too many requests. Please wait a moment before trying again.');
+    }
+
+    return new Error(rawMsg || 'Authentication failed. Please check your credentials.');
   }
 
   /**
-   * Retrieves active authenticated user session
+   * Retrieves active authenticated user session and synced profile
    */
   async getCurrentUser(): Promise<User | null> {
     try {
-      const data = localStorage.getItem(AUTH_USER_KEY);
-      if (!data) return Promise.resolve(null);
-      return Promise.resolve(JSON.parse(data));
-    } catch {
-      return Promise.resolve(null);
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) {
+        return null;
+      }
+
+      // Fetch authoritative application profile from backend PostgreSQL
+      const profile = await apiRequest<User>('/auth/profile', { requiresAuth: true });
+      return profile;
+    } catch (err: any) {
+      // If profile fetch failed or unauthenticated, return null
+      return null;
     }
   }
 
   /**
-   * Authenticates user credentials
+   * Authenticates user credentials via Supabase Auth
    */
   async login(credentials: { email: string; password: string }): Promise<User> {
-    const emailNorm = credentials.email.trim().toLowerCase();
-    const accounts = this.loadAccounts();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: credentials.email.trim(),
+      password: credentials.password,
+    });
 
-    const account = accounts.find(a => a.user.email.toLowerCase() === emailNorm);
-
-    if (!account) {
-      throw new Error('No Nexora account found with this email address.');
+    if (error) {
+      throw this.formatAuthError(error);
     }
 
-    if (account.passwordHash !== credentials.password) {
-      throw new Error('Invalid password. Please verify your credentials.');
+    if (!data.user) {
+      throw new Error('Authentication succeeded but user identity was missing.');
     }
 
-    try {
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(account.user));
-    } catch {
-      // Storage unavailable
-    }
-
-    return Promise.resolve({ ...account.user });
+    // Retrieve synced PostgreSQL profile
+    const profile = await apiRequest<User>('/auth/profile', { requiresAuth: true });
+    return profile;
   }
 
   /**
-   * Registers a new user account
+   * Registers a new user account with Supabase Auth
    */
-  async register(data: { name: string; email: string; password: string }): Promise<User> {
-    const emailNorm = data.email.trim().toLowerCase();
-    const accounts = this.loadAccounts();
+  async register(data: { name: string; email: string; password: string }): Promise<RegisterResult> {
+    const trimmedName = data.name.trim();
+    const trimmedEmail = data.email.trim();
 
-    if (accounts.some(a => a.user.email.toLowerCase() === emailNorm)) {
-      throw new Error('An account with this email address already exists. Please sign in.');
-    }
-
-    if (!data.name.trim() || data.name.trim().length < 2) {
+    if (!trimmedName || trimmedName.length < 2) {
       throw new Error('Please enter your full name (minimum 2 characters).');
     }
 
@@ -133,69 +89,83 @@ class AuthService {
       throw new Error('Password must be at least 6 characters long.');
     }
 
-    const newUser: User = {
-      id: `usr_${Date.now()}`,
-      name: data.name.trim(),
-      email: emailNorm,
-      joinedDate: new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date()),
-      savedAddresses: [],
-    };
-
-    accounts.push({
-      user: newUser,
-      passwordHash: data.password,
+    const { data: authData, error } = await supabase.auth.signUp({
+      email: trimmedEmail,
+      password: data.password,
+      options: {
+        data: {
+          name: trimmedName,
+        },
+      },
     });
 
-    this.saveAccounts(accounts);
-
-    try {
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(newUser));
-    } catch {
-      // Storage unavailable
+    if (error) {
+      throw this.formatAuthError(error);
     }
 
-    return Promise.resolve({ ...newUser });
+    const authUser = authData.user;
+    if (!authUser) {
+      throw new Error('Registration failed to create an account.');
+    }
+
+    const requiresEmailConfirmation = !authData.session;
+
+    let profile: User;
+    if (authData.session) {
+      // If session exists immediately, fetch profile
+      profile = await apiRequest<User>('/auth/profile', { requiresAuth: true });
+    } else {
+      // Pending email verification
+      profile = {
+        id: authUser.id,
+        name: trimmedName,
+        email: trimmedEmail,
+        joinedDate: new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date()),
+        savedAddresses: [],
+      };
+    }
+
+    return { user: profile, requiresEmailConfirmation };
   }
 
   /**
-   * Destroys active user session
+   * Initiates Google OAuth Sign-In via Supabase Auth
+   */
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+
+    if (error) {
+      throw this.formatAuthError(error);
+    }
+  }
+
+  /**
+   * Destroys active Supabase user session
    */
   async logout(): Promise<void> {
     try {
-      localStorage.removeItem(AUTH_USER_KEY);
-    } catch {
-      // Storage unavailable
+      await supabase.auth.signOut();
+      await apiRequest('/auth/logout', { method: 'POST' });
+    } catch (err) {
+      // Ignore network errors on logout
     }
-    return Promise.resolve();
   }
 
   /**
-   * Updates user profile
+   * Updates profile fields in PostgreSQL
    */
   async updateProfile(updates: Partial<User>): Promise<User> {
-    const current = await this.getCurrentUser();
-    if (!current) {
-      throw new Error('Not authenticated.');
-    }
-
-    const updatedUser: User = {
-      ...current,
-      ...updates,
-    };
-
-    try {
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updatedUser));
-      const accounts = this.loadAccounts();
-      const idx = accounts.findIndex(a => a.user.id === current.id);
-      if (idx !== -1) {
-        accounts[idx].user = updatedUser;
-        this.saveAccounts(accounts);
-      }
-    } catch {
-      // Storage unavailable
-    }
-
-    return Promise.resolve(updatedUser);
+    const updated = await apiRequest<User>('/auth/profile', {
+      method: 'PUT',
+      requiresAuth: true,
+      body: JSON.stringify(updates),
+    });
+    return updated;
   }
 
   /**
@@ -203,24 +173,18 @@ class AuthService {
    */
   async getSavedAddresses(): Promise<ShippingAddress[]> {
     const user = await this.getCurrentUser();
-    return Promise.resolve(user?.savedAddresses || []);
+    return user?.savedAddresses || [];
   }
 
   /**
-   * Saves a new address to user profile
+   * Saves a new address to user profile in PostgreSQL
    */
   async addSavedAddress(address: ShippingAddress): Promise<ShippingAddress[]> {
-    const user = await this.getCurrentUser();
-    if (!user) return [];
-
-    const addresses = user.savedAddresses ? [...user.savedAddresses] : [];
-    // Avoid duplicate addresses
-    const isDup = addresses.some(a => a.addressLine.toLowerCase() === address.addressLine.toLowerCase() && a.postalCode === address.postalCode);
-    if (!isDup) {
-      addresses.push(address);
-      await this.updateProfile({ savedAddresses: addresses });
-    }
-
+    const addresses = await apiRequest<ShippingAddress[]>('/auth/addresses', {
+      method: 'POST',
+      requiresAuth: true,
+      body: JSON.stringify(address),
+    });
     return addresses;
   }
 }

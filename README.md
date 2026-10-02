@@ -1,6 +1,6 @@
 # NEXORA — Modern Products. Simple Shopping.
 
-NEXORA is a high-end, luxury-minimalist e-commerce platform built for thoughtful everyday essentials, acoustic instruments, and precision workplace tools. Designed with architectural restraint, typographic discipline, and clean engineering, NEXORA simulates complete real-world commercial behavior while maintaining a service layer structured for seamless migration to Node.js, Express.js, and PostgreSQL.
+NEXORA is a high-end, luxury-minimalist full-stack e-commerce platform built for thoughtful everyday essentials, acoustic instruments, and precision workplace tools. Designed with architectural restraint, typographic discipline, and clean engineering, NEXORA pairs a responsive React 19 frontend with an Express.js backend, a PostgreSQL 18 relational database, and **Supabase Auth** for identity management.
 
 ---
 
@@ -10,167 +10,175 @@ NEXORA is a high-end, luxury-minimalist e-commerce platform built for thoughtful
   - Dynamic curated hero with spotlight instrument showcase.
   - Category navigation across four distinct disciplines: *Electronics*, *Accessories*, *Gaming*, *Lifestyle*.
   - Handpicked Featured Collection and New Arrivals grids.
-  - Architectural brand story ("Better products. Less noise.") emphasizing material durability and tactile precision.
+  - Brand story ("Better products. Less noise.") emphasizing material durability and tactile precision.
 - **Search, Filtering & Sorting Catalog**:
-  - Live client-side instant search across product names, descriptions, categories, and tags.
-  - Collapsible desktop sidebar filter system with live counts across discipline categories, price ranges, star ratings (4.0+, 4.5+, 4.8+), and stock availability.
-  - Interactive dual-thumb price range slider with floating dynamic labels (₹0–₹30,000+), quick presets, and direct numeric input.
-  - Desktop toolbar dropdown filters for Category, Price, Customer Rating, In-Stock toggle, and active filter dismiss pills.
-  - Tactile luxury product cards featuring subtle vertical lift (`-translate-y-1.5`), soft shadow elevation, and silky ease-out image zoom on hover.
+  - Full-text search across product names, descriptions, categories, and tags.
+  - Parameterized database filtering by discipline category, price ranges, star ratings (4.0+, 4.5+, 4.8+), and stock availability.
+  - Interactive dual-thumb price range slider (₹0–₹30,000+), quick presets, and direct numeric input.
   - Sorting by Featured status, Newest arrivals, Price (asc/desc), and Customer Ratings.
-  - "Recently Viewed" chronological section tracking and displaying the last 4 clicked instruments with instant "Clear History" control.
-  - Responsive slide-out mobile drawer with touch-friendly accordion controls.
-- **Navigation & Accessibility**:
-  - Top Bar Contract conforming navigation header with categories, search, bag, and account status.
-  - Semantic Schema.org Breadcrumb component on `ShopPage` and `ProductDetailPage` displaying hierarchical parents (`Home` > `Shop` > `Category` > `Product`) with microdata and `aria-current="page"`.
-  - Minimalist floating "Back to Top" affordance that appears dynamically when scrolled 400px down.
-  - Slide-out mobile navigation drawer with focus trapping and ESC key dismiss.
+  - "Recently Viewed" chronological section tracking and displaying the last 4 clicked instruments.
+- **Authentication & Identity via Supabase Auth**:
+  - Full user registration and password authentication managed by **Supabase Auth**.
+  - **Google OAuth**: One-click "Continue with Google" sign-in integrated seamlessly with Supabase Auth.
+  - **Zero Password Storage**: NEXORA's business database stores zero passwords or bcrypt hashes. Credentials are owned exclusively by Supabase Auth.
+  - Canonical user identities use Supabase Auth UUIDs mapped 1:1 to PostgreSQL `profiles`.
+  - Built-in evaluator demo accounts (`alex@nexora.design` / `password123` and `priya@nexora.design` / `password123`) seeded directly in Supabase Auth.
 - **Contiguous Product Detail Page (PDP)**:
   - Multi-angle high-resolution gallery with thumbnail switcher.
   - Real-time stock status indicator with low-stock warnings (e.g. `< 6` units remaining).
   - Tactile quantity stepper respecting inventory thresholds.
   - "Add to Bag" feedback with non-blocking toast notifications and "Buy Now" 1-click express checkout.
   - Technical specification tables, engineering highlights, and domestic delivery/warranty policies.
-  - Client Review & Rating System (`ProductReviewsSection`) with overall score, star breakdown progress bars, filter-by-star rating, review submission form with interactive 5-star picker, author initials avatar, and verified buyer badges.
-  - Related product recommendations in matching categories.
+  - Client Review & Rating System with interactive star picker.
 - **Side-by-Side Product Comparison Tool**:
   - Interactive comparison of up to 3 products across the catalog.
-  - Floating bottom comparison dock (`CompareDock`) with quick item removal, slot counter, and instant trigger.
-  - Full-screen side-by-side comparison matrix (`ProductComparisonModal`) with sticky headers and criteria navigation.
-  - Deep feature analysis: Pricing & savings, Star ratings, Key features, Technical specifications (dynamically aggregated), Form dimensions, Weight, and Domestic warranty.
-  - "Highlight Differences" toggle that visually isolates conflicting specifications.
-  - In-table direct "Add to Bag" actions and slot dropdown picker to add alternative products on the fly.
+  - Floating bottom comparison dock (`CompareDock`) with quick item removal.
+  - Full-screen side-by-side comparison matrix (`ProductComparisonModal`) with sticky headers.
 - **Commerce Cart & Quick Bag Drawer**:
   - Global slide-over bag drawer accessible anytime from the navigation bar.
   - Dedicated `/cart` page with line-item management, quantity steppers, and item removal.
   - Real-time free shipping threshold meter (Complimentary domestic delivery on orders ₹2,000+).
-  - Promotional privilege code validator (e.g., `NEXORA10` for 10% off, `WELCOME15` for 15% off).
-  - Itemized financial accounting: Subtotal, Shipping, 18% GST component, and Final Total.
-- **Frictionless Checkout Flow**:
-  - Inline input validation with user-friendly error alerts (zero browser `alert()` usage).
+  - Promotional privilege code validator (`NEXORA10` for 10% off, `WELCOME15` for 15% off, `STUDIO20` for 20% off).
+- **Frictionless Transactional Checkout**:
+  - Client sends ONLY product IDs and quantities — the backend recalculates and verifies prices, taxes, and shipping authoritatively.
+  - Row-level locking (`SELECT ... FOR UPDATE`) prevents concurrent overselling.
   - Fast-fill evaluator sample address button for 1-click end-to-end testing.
   - Delivery speed selector: Standard Ground Courier vs Express Air Priority.
   - Payment settlement choices: Cash on Delivery (COD), Instant UPI, and Credit/Debit Card prototype.
-  - Deterministic order numbering generation (`NX-2026-XXXXX`).
+  - Deterministic customer-facing order numbering (`NX-2026-XXXXX`).
 - **Post-Purchase & Order Lifecycle**:
   - Order confirmation screen with estimated delivery scheduling and courier tracking reference.
-  - My Orders history with visual status indicators, pulsing milestone dots, and 4-step fulfillment progress timeline (`Confirmed`, `Processing`, `Shipped`, `Delivered`).
-  - Interactive receipt inspection modal showing line items, shipping destinations, and financial breakdown.
-- **Client Account & Authentication**:
-  - User registration and login with local session persistence.
-  - Built-in evaluator demo accounts (`alex@nexora.design` / `password123` and `priya@nexora.design` / `password123`).
-  - Account profile dashboard with saved shipping address book and wishlist manager.
-- **Design System & Zero-Pill Discipline**:
-  - Warm Ivory (`#F7F5F0`), Deep Emerald (`#123C35`), Graphite (`#171A19`), Champagne Gold (`#B89B5E`).
-  - Shimmering skeleton screen loaders for both ShopPage and ProductDetailPage preventing layout shift while fetching catalog data.
-  - Tabular numerals (`tabular-nums`) for clean financial alignment.
-  - Zero-pill metadata discipline: unboxed text separated by typographic middots (`·`).
-  - Full WCAG AA contrast compliance, visible focus outlines, and `prefers-reduced-motion` compliance.
+  - "My Orders" history with visual status indicators, pulsing milestone dots, and 4-step fulfillment progress timeline.
 
 ---
 
 ## 2. Technology Stack
 
-- **Framework**: React 19 + TypeScript (ES2022)
-- **Bundler & Dev Server**: Vite 8 with `@vitejs/plugin-react`
-- **Styling**: Tailwind CSS v4 with custom design tokens
-- **Typography**: Plus Jakarta Sans & Cormorant Garamond
-- **Icons**: Lucide React
-- **State Architecture**: React Context (`CartContext`, `AuthContext`, `ToastContext`) + decoupled service layer
+- **Frontend**: React 19 + TypeScript (ES2022) + Vite 8
+- **Styling**: Tailwind CSS v4 with custom design tokens (Warm Ivory `#F7F5F0`, Deep Emerald `#123C35`, Champagne Gold `#B89B5E`)
+- **Backend**: Node.js (v20+) + Express.js (v4.21)
+- **Database**: PostgreSQL 18
+- **Authentication**: **Supabase Auth** (`@supabase/supabase-js`) + Google OAuth
+- **Database Driver**: `pg` with connection pooling
+- **Security**: `helmet`, `cors`, `express-rate-limit`, parameterized SQL queries
 
 ---
 
-## 3. Directory Structure
+## 3. Full-Stack Directory Structure
 
 ```
-src/
-├── types/
-│   └── index.ts                 # Product, Order, User, Cart, Filter types
-├── utils/
-│   ├── currency.ts              # Indian Rupee (INR) formatter with lakhs/thousands
-│   └── id.ts                    # Order ID generator and date formatters
-├── data/
-│   ├── products.ts              # 18 high-end deterministic products with full specs
-│   └── productImages.ts         # High-fidelity SVG vector studio illustrations
-├── services/
-│   ├── productService.ts        # Catalog queries, filters, categories
-│   ├── cartService.ts           # Cart state, stock constraints, promo codes, financials
-│   ├── orderService.ts          # Order generation, validation, history
-│   └── authService.ts           # Authentication, profile, saved addresses
-├── context/
-│   ├── CartContext.tsx          # Shopping bag state and slide-over drawer controls
-│   ├── AuthContext.tsx          # Active user session and saved wishlist
-│   └── ToastContext.tsx         # Accessible non-blocking notifications
-├── components/
-│   ├── common/
-│   │   ├── Navbar.tsx           # 3-Zone contract navigation bar
-│   │   ├── MobileDrawer.tsx     # Slide-out mobile menu with focus trapping
-│   │   ├── Footer.tsx           # Clean footer with links and promises
-│   │   ├── ToastContainer.tsx   # Stacked notifications
-│   │   ├── Breadcrumb.tsx       # Unboxed clean breadcrumb trail
-│   │   ├── EmptyState.tsx       # Contextual empty states with CTAs
-│   │   ├── SkeletonLoader.tsx   # Pulse loading placeholders
-│   │   └── CartDrawer.tsx       # Quick slide-over shopping bag
-│   └── shop/
-│       ├── ProductCard.tsx      # Consistent 4:3 card with hover zoom & quick actions
-│       ├── FilterBar.tsx        # Search, categories, price presets, sort dropdown
-│       └── ProductGrid.tsx      # Responsive grid with auto-alignment
-├── pages/
-│   ├── HomePage.tsx             # Hero, category tiles, featured, story, new arrivals
-│   ├── ShopPage.tsx             # Full catalog with search, filter, sort
-│   ├── ProductDetailPage.tsx    # Gallery, buy module, spec tabs, related products
-│   ├── CartPage.tsx             # Dedicated bag page, promo codes, totals
-│   ├── CheckoutPage.tsx         # Address form, delivery speed, payment selection
-│   ├── OrderConfirmationPage.tsx# Post-order confirmation with tracking ID
-│   ├── OrdersPage.tsx           # Order history and receipt viewer modal
-│   ├── AuthPage.tsx             # Sign in & registration with 1-click test fill
-│   ├── ProfilePage.tsx          # Account info, saved addresses, logout
-│   ├── WishlistPage.tsx         # Saved items manager
-│   └── NotFoundPage.tsx         # Graceful 404 route
-├── App.tsx                      # Root shell and hash router
-└── index.css                    # Design system tokens and accessibility rules
+CodeAlpha_EcommerceStore/
+├── backend/
+│   ├── sql/
+│   │   ├── schema.sql            # PostgreSQL DDL tables (profiles, products, orders, order_items)
+│   │   ├── seed.sql              # Deterministic catalog (18 products, 4 categories)
+│   │   └── migrate_to_supabase.sql # Migration to profiles table with Supabase UUIDs
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── db.js             # PostgreSQL connection pool & query helpers
+│   │   │   └── supabase.js       # Supabase Admin & Public clients
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   ├── product.controller.js
+│   │   │   └── order.controller.js
+│   │   ├── middleware/
+│   │   │   ├── auth.middleware.js # Supabase Bearer token verification & profile sync
+│   │   │   ├── error.middleware.js # Centralized error & 404 handler
+│   │   │   └── validate.middleware.js # Request payload validation
+│   │   ├── routes/
+│   │   │   ├── auth.routes.js    # Profile & address routes
+│   │   │   ├── product.routes.js # Catalog & detail routes
+│   │   │   └── order.routes.js   # Transactional order routes
+│   │   ├── services/
+│   │   │   ├── auth.service.js   # PostgreSQL profile management
+│   │   │   ├── product.service.js# Parameterized SQL queries
+│   │   │   └── order.service.js  # Transaction management & stock locking
+│   │   ├── utils/
+│   │   │   └── apiResponse.js    # Standardized response format
+│   │   ├── app.js                # Express app configuration
+│   │   └── server.js             # Server startup & graceful shutdown
+│   ├── package.json
+│   └── testEndpoints.js          # Automated backend integration test suite
+│
+├── src/                          # NEXORA Frontend
+│   ├── lib/
+│   │   └── supabase.ts           # Canonical Supabase client instance
+│   ├── services/
+│   │   ├── apiClient.ts          # Centralized API client with dynamic Supabase token injection
+│   │   ├── productService.ts     # Connected to GET /api/products
+│   │   ├── authService.ts        # Supabase Auth operations & Google OAuth
+│   │   ├── orderService.ts       # Connected to POST /api/orders
+│   │   └── cartService.ts        # Client-side cart manager
+│   ├── context/
+│   │   ├── AuthContext.tsx       # Supabase session lifecycle & state management
+│   │   ├── CartContext.tsx       # Bag state & drawer controls
+│   │   └── ToastContext.tsx      # Non-blocking notification queue
+│   ├── components/               # Nav, ProductCard, Modals, Comparison
+│   ├── pages/                    # Home, Shop, PDP, Cart, Checkout, Orders, Profile, Auth
+│   └── index.css                 # Design tokens & typography
+│
+├── API.md                        # Complete REST API reference
+├── DATABASE.md                   # PostgreSQL schema, ER model, indexing
+├── SUPABASE_AUTH_SETUP.md        # Supabase setup and dashboard configuration guide
+└── BACKEND_INTEGRATION_NOTES.md # Architecture & security specifications
 ```
 
 ---
 
-## 4. How to Run Locally
+## 4. Setup & Running Locally
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+### 1. Database Setup
+```bash
+psql -U postgres -d nexora_db -f backend/sql/schema.sql
+psql -U postgres -d nexora_db -f backend/sql/seed.sql
+```
 
-2. **Start development server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:3000` in your browser.
+### 2. Environment Variables
+Configure `backend/.env`:
+```env
+PORT=5000
+NODE_ENV=development
+DATABASE_URL=postgresql://postgres:your_password@127.0.0.1:5432/nexora_db
+CLIENT_URL=http://localhost:3000
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=eyJhbGciOi... # Server-only service_role key
+```
 
-3. **Verify build & lint**:
-   ```bash
-   npm run lint
-   npm run build
-   ```
+Configure root `.env`:
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+VITE_SUPABASE_ANON_KEY=eyJhbGciOi...
+```
+
+### 3. Run the Servers
+Open two terminal windows:
+
+**Terminal 1 — Backend Express Server**:
+```bash
+npm run server
+```
+Server starts on `http://localhost:5000` (Health check at `http://localhost:5000/api/health`).
+
+**Terminal 2 — Frontend Vite Application**:
+```bash
+npm run dev
+```
+Open `http://localhost:3000` in your browser.
+
+### 4. Run Automated Backend Tests
+```bash
+npm run test:backend
+```
+Executes the automated integration test suite (20 assertions covering health, Supabase Auth session verification, profile synchronization, duplicate prevention, product filters, stock deduction, and transactional orders).
 
 ---
 
-## 5. Mock Data & Prototype Behavior
+## 5. Demo Credentials
 
-- **Determinism**: Product data (18 items across 4 categories) contains consistent pricing in Indian Rupees (INR ₹), fixed inventory limits, realistic dimensions, and complete technical specifications.
-- **Stock Constraint Enforcement**: Adding items to the bag checks active inventory. If an item has only 4 units left in stock, the stepper will prevent exceeding 4 units and notify the user via a toast message.
-- **Cart & Order Persistence**: Stored via `localStorage` abstractions inside `src/services/` so reloading or navigating does not clear the cart or wipe order history.
-- **Authentication**: Simulated client-side session with pre-configured accounts:
-  - `alex@nexora.design` / `password123` (Alex Morgan)
-  - `priya@nexora.design` / `password123` (Priya Sharma)
-
----
-
-## 6. Future Backend Integration (Antigravity Phase)
-
-NEXORA's UI components do **not** directly execute `localStorage` queries or hardcoded database rules. All operations invoke the Service Layer:
-- `productService` → Replaced with `GET /api/products` and `GET /api/products/:id`
-- `cartService` → Can remain client-side or sync with `POST /api/cart`
-- `orderService` → Replaced with `POST /api/orders` and `GET /api/orders`
-- `authService` → Replaced with `POST /api/auth/login`, `POST /api/auth/register`, and JWT Bearer headers.
-
-For technical specifications, PostgreSQL DDL schemas, and REST request/response shapes, review `BACKEND_INTEGRATION_NOTES.md`.
+| Role | Email | Password | Supabase Canonical UUID |
+| :--- | :--- | :--- | :--- |
+| **Demo Client 1** | `alex@nexora.design` | `password123` | `35aed916-16f4-4bc4-b198-e689e6d5e59e` |
+| **Demo Client 2** | `priya@nexora.design` | `password123` | `53f2f66e-7f2a-455c-acae-27f83a496f87` |
