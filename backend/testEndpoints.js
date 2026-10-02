@@ -142,16 +142,27 @@ async function runTests() {
       discountCode: 'NEXORA10',
     };
 
+    // Verify guest checkout is strictly rejected by backend API
+    const guestOrderRes = await request('/orders', {
+      method: 'POST',
+      body: orderPayload,
+    });
+    assert(
+      guestOrderRes.status === 401 && guestOrderRes.data?.error?.code === 'AUTH_REQUIRED',
+      'POST /api/orders strictly rejects guest checkout with 401 Unauthorized'
+    );
+
+    // Verify authenticated order creation with anti-spoofing check
     const orderRes = await request('/orders', {
       method: 'POST',
       headers: { Authorization: `Bearer ${supabaseAccessToken}` },
-      body: orderPayload,
+      body: { ...orderPayload, userId: 'spoofed-untrusted-client-id' },
     });
 
     assert(orderRes.status === 201 && orderRes.data.success === true, 'POST /api/orders creates order transactionally with Supabase identity');
     const created = orderRes.data.data;
     placedOrderNumber = created.id;
-    assert(created.userId === authenticatedUserId, 'Order linked to canonical Supabase Auth UUID');
+    assert(created.userId === authenticatedUserId, 'Order linked to canonical Supabase Auth UUID, ignoring spoofed client userId');
     assert(created.items[0].price === 14999, 'Server-authoritative price applied');
     assert(created.discount === 1500, 'Server-authoritative 10% discount applied');
 

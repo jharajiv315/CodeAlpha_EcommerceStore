@@ -76,6 +76,13 @@ class OrderService {
     paymentMethod = 'cod',
     discountCode,
   }) {
+    if (!userId) {
+      const err = new Error('Authentication required to place an order.');
+      err.statusCode = 401;
+      err.errorCode = 'AUTH_REQUIRED';
+      throw err;
+    }
+
     const client = await getClient();
 
     try {
@@ -292,20 +299,18 @@ class OrderService {
 
     const order = orderRes.rows[0];
 
-    // Enforce authorization: if order belongs to a user, enforce ownership
-    if (order.user_id) {
-      if (!userId) {
-        const err = new Error('Authentication required to view this order.');
-        err.statusCode = 401;
-        err.errorCode = 'UNAUTHORIZED';
-        throw err;
-      }
-      if (order.user_id !== userId) {
-        const err = new Error('Unauthorized to view this order.');
-        err.statusCode = 403;
-        err.errorCode = 'FORBIDDEN';
-        throw err;
-      }
+    // Enforce authorization: all orders require authentication and user ownership
+    if (!userId) {
+      const err = new Error('Authentication required to view this order.');
+      err.statusCode = 401;
+      err.errorCode = 'UNAUTHORIZED';
+      throw err;
+    }
+    if (order.user_id && order.user_id !== userId) {
+      const err = new Error('Unauthorized to view this order.');
+      err.statusCode = 403;
+      err.errorCode = 'FORBIDDEN';
+      throw err;
     }
 
     const itemsRes = await query(

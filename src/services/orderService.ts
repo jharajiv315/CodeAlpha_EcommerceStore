@@ -82,6 +82,7 @@ class OrderService {
 
     const confirmedOrder = await apiRequest<Order>('/orders', {
       method: 'POST',
+      requiresAuth: true,
       body: JSON.stringify(requestBody),
     });
 
@@ -109,7 +110,7 @@ class OrderService {
    */
   async getOrderById(orderId: string): Promise<Order | null> {
     try {
-      return await apiRequest<Order>(`/orders/${orderId}`);
+      return await apiRequest<Order>(`/orders/${orderId}`, { requiresAuth: true });
     } catch (err: any) {
       if (err.statusCode === 404) return null;
       console.warn('[OrderService] Error retrieving order:', err.message);

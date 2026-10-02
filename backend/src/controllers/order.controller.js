@@ -3,8 +3,18 @@ import { sendSuccess, sendError } from '../utils/apiResponse.js';
 
 export const createOrder = async (req, res, next) => {
   try {
+    if (!req.user || !req.user.id) {
+      return sendError(
+        res,
+        'Authentication required. You must sign in to place an order.',
+        401,
+        'AUTH_REQUIRED'
+      );
+    }
+
     const { items, shippingAddress, deliveryMethod, paymentMethod, discountCode } = req.body;
-    const userId = req.user ? req.user.id : undefined;
+    // Strictly bind order to verified server-side user ID, ignoring any client-provided userId
+    const userId = req.user.id;
 
     const order = await orderService.createOrder({
       userId,
@@ -33,7 +43,15 @@ export const getUserOrders = async (req, res, next) => {
 export const getOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const userId = req.user ? req.user.id : null;
+    if (!req.user || !req.user.id) {
+      return sendError(
+        res,
+        'Authentication required to view order details.',
+        401,
+        'AUTH_REQUIRED'
+      );
+    }
+    const userId = req.user.id;
     const order = await orderService.getOrderById(id, userId);
 
     if (!order) {

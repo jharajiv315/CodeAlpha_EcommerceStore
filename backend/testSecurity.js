@@ -94,23 +94,44 @@ async function runSecurityAudit() {
 
   assert(userAId !== userBId, 'User A and User B are distinct Supabase accounts');
 
-  // User A places an order
+  const orderPayloadSample = {
+    items: [{ productId: 'nexora-arc-headphones', quantity: 1 }],
+    shippingAddress: {
+      fullName: 'Alex Morgan',
+      email: 'alex@nexora.design',
+      phone: '9876543210',
+      addressLine: '12 Design Boulevard',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      postalCode: '560001',
+    },
+    deliveryMethod: 'standard',
+    paymentMethod: 'card',
+  };
+
+  // Security Test: Guest attempt to create order without token -> 401 Unauthorized
+  const guestOrderRes = await request('/orders', {
+    method: 'POST',
+    body: orderPayloadSample,
+  });
+  assert(guestOrderRes.status === 401, 'Guest order creation rejected with 401 Unauthorized');
+  assert(guestOrderRes.data?.error?.code === 'AUTH_REQUIRED', 'AUTH_REQUIRED error code returned for guest order attempt');
+
+  // Security Test: Malformed/invalid token -> 401 Unauthorized
+  const invalidTokenRes = await request('/orders', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer this-is-an-invalid-fake-token' },
+    body: orderPayloadSample,
+  });
+  assert(invalidTokenRes.status === 401, 'Invalid Bearer token rejected with 401 Unauthorized');
+
+  // Security Test: User A places order with spoofed userId in body -> Server strictly uses req.user.id
   const orderRes = await request('/orders', {
     method: 'POST',
     headers: { Authorization: `Bearer ${tokenA}` },
     body: {
-      items: [{ productId: 'nexora-arc-headphones', quantity: 1 }],
-      shippingAddress: {
-        fullName: 'Alex Morgan',
-        email: 'alex@nexora.design',
-        phone: '9876543210',
-        addressLine: '12 Design Boulevard',
-        city: 'Bengaluru',
-        state: 'Karnataka',
-        postalCode: '560001',
-      },
-      deliveryMethod: 'standard',
-      paymentMethod: 'card',
+      ...orderPayloadSample,
+      userId: userBId, // Malicious attempt: User A tries to bill/assign order to User B
     },
   });
 
@@ -118,6 +139,7 @@ async function runSecurityAudit() {
     console.error('Order creation failed:', orderRes.status, orderRes.data);
   }
   assert(orderRes.status === 201, 'User A creates authenticated order successfully');
+  assert(orderRes.data?.data?.userId === userAId, 'Order bound to verified req.user.id, defeating body userId spoofing attempt');
   const userAOrderNumber = orderRes.data?.data?.id;
 
   // 1. User A retrieves own order -> 200 PASS

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ToastProvider } from './context/ToastContext';
-import { CartProvider } from './context/CartContext';
+import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { ComparisonProvider, useComparison } from './context/ComparisonContext';
 import { ToastContainer } from './components/common/ToastContainer';
@@ -44,6 +44,7 @@ export default function App() {
 
 function AppShell() {
   const { openCompare } = useComparison();
+  const { cart } = useCart();
 
   // Client-side hash routing
   const [route, setRoute] = useState<string>('home');
@@ -190,7 +191,13 @@ function AppShell() {
         {route === 'auth' && (
           <AuthPage
             onNavigateHome={() => navigate('home')}
-            onAuthSuccess={() => navigate('profile')}
+            onAuthSuccess={() => {
+              if (cart.length > 0) {
+                navigate('checkout');
+              } else {
+                navigate('profile');
+              }
+            }}
           />
         )}
 
