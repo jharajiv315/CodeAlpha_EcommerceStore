@@ -33,13 +33,19 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={menuRef}
-      role="region"
-      aria-label="Shop Departments Mega Menu"
-      onMouseLeave={onClose}
-      className="absolute top-full left-0 w-full bg-[#FFFFFF] border-b border-[#E4E1DA] shadow-xl z-50 transition-opacity duration-150"
-    >
+    <>
+      {/* Soft Backdrop Dimming */}
+      <div
+        className="fixed inset-0 top-[108px] bg-[#171A19]/35 backdrop-blur-[2px] z-40 animate-fade-in pointer-events-auto"
+        onClick={onClose}
+      />
+      <div
+        ref={menuRef}
+        role="region"
+        aria-label="Shop Departments Mega Menu"
+        onMouseLeave={onClose}
+        className="absolute top-full left-0 w-full bg-[#FFFFFF] border-b border-[#E4E1DA] shadow-2xl z-50 animate-fade-slide-down origin-top"
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Department Columns: 4 Groups spanning 9 columns */}
@@ -152,5 +158,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
         </div>
       </div>
     </div>
-  );
+  </>
+);
 };

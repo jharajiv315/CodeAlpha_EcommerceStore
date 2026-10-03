@@ -140,7 +140,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
         </button>
 
         {openSections.categories && (
-          <div className="space-y-1">
+          <div className="space-y-1 animate-fade-slide-down">
             {/* All Categories Option */}
             <button
               type="button"
@@ -207,7 +207,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
           </button>
 
           {openSections.brands && (
-            <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
+            <div className="space-y-1 max-h-48 overflow-y-auto pr-1 animate-fade-slide-down">
               <button
                 type="button"
                 onClick={() => handleBrandSelect(undefined)}
@@ -266,7 +266,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
         </button>
 
         {openSections.price && (
-          <div className="pt-1">
+          <div className="pt-1 animate-fade-slide-down">
             <PriceRangeSlider
               minPrice={filters.minPrice}
               maxPrice={filters.maxPrice}
@@ -294,7 +294,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
         </button>
 
         {openSections.rating && (
-          <div className="space-y-1">
+          <div className="space-y-1 animate-fade-slide-down">
             {RATING_TIERS.map(tier => {
               const active = tier.value === 0
                 ? !filters.minRating || filters.minRating === 0
@@ -351,7 +351,7 @@ export const ShopSidebarFilter: React.FC<ShopSidebarFilterProps> = ({
         </button>
 
         {openSections.availability && (
-          <div className="space-y-2">
+          <div className="space-y-2 animate-fade-slide-down">
             <label className="flex items-center justify-between px-2.5 py-2 rounded-lg bg-[#F7F5F0]/70 hover:bg-[#F7F5F0] cursor-pointer transition-colors select-none">
               <div className="flex items-center gap-2.5">
                 <input

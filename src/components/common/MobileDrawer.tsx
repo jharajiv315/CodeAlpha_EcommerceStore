@@ -77,12 +77,12 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#171A19]/50 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#171A19]/50 backdrop-blur-xs transition-opacity animate-fade-in"
         onClick={onClose}
       />
 
       <div className="fixed inset-y-0 left-0 max-w-full flex pr-10">
-        <div className="w-screen max-w-sm bg-[#FFFFFF] shadow-2xl flex flex-col justify-between">
+        <div className="w-screen max-w-sm bg-[#FFFFFF] shadow-2xl flex flex-col justify-between animate-drawer-left">
           {/* Top Brand Header */}
           <div className="p-5 border-b border-[#E4E1DA] flex items-center justify-between">
             <span className="text-xl font-black tracking-tight text-[#171A19]">
@@ -166,7 +166,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                       </button>
 
                       {isExpanded && (
-                        <div className="p-3 bg-[#FFFFFF] space-y-1 divide-y divide-[#E4E1DA]/40">
+                        <div className="p-3 bg-[#FFFFFF] space-y-1 divide-y divide-[#E4E1DA]/40 animate-fade-slide-down">
                           {dept.categories.map((cat) => (
                             <button
                               key={cat.label}

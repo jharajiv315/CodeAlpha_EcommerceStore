@@ -103,16 +103,16 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="comparison-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden"
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#171A19]/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#171A19]/60 backdrop-blur-xs transition-opacity animate-fade-in"
         onClick={closeCompare}
       />
 
       {/* Modal Dialog Container */}
-      <div className="relative w-full max-w-6xl max-h-[92vh] bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E1DA] flex flex-col overflow-hidden z-10">
+      <div className="relative w-full max-w-6xl max-h-[92vh] bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E1DA] flex flex-col overflow-hidden z-10 animate-modal-pop">
         {/* Top Header Bar */}
         <div className="px-6 py-4 border-b border-[#E4E1DA] bg-[#FDFCFB] flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">

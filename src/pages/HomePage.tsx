@@ -108,7 +108,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <button
                   type="button"
                   onClick={() => onNavigate('shop')}
-                  className="px-7 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-bold tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  className="px-7 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-bold tracking-wider uppercase rounded-lg transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
                   <span>Browse All Products ({totalProducts})</span>
                   <ArrowRight className="w-4 h-4" />
@@ -117,7 +117,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <button
                   type="button"
                   onClick={() => onNavigate('shop', undefined, { dealsOnly: true })}
-                  className="px-7 py-3.5 bg-[#FFFFFF] border border-[#123C35] text-[#123C35] hover:bg-[#EDE4D2]/40 text-xs font-bold tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="px-7 py-3.5 bg-[#FFFFFF] border border-[#123C35] text-[#123C35] hover:bg-[#EDE4D2]/40 text-xs font-bold tracking-wider uppercase rounded-lg transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Tag className="w-4 h-4 text-[#123C35]" />
                   <span>Today's Deals (Up to 34% Off)</span>
@@ -174,7 +174,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       alt={spotlightProduct?.name || 'Flagship Electronics'}
                       width={280}
                       height={280}
-                      className="w-full h-full object-contain transition-transform duration-300 group-hover/hero:scale-105"
+                      className="w-full h-full object-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/hero:scale-105 will-change-transform"
                       loading="eager"
                     />
                   </div>
@@ -238,10 +238,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               key={name}
               type="button"
               onClick={() => onNavigate('shop', name)}
-              className="group text-left bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] p-5 rounded-xl transition-all cursor-pointer flex flex-col justify-between h-44 shadow-2xs hover:shadow-sm"
+              className="group text-left bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] p-5 rounded-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-44 shadow-2xs"
             >
               <div>
-                <div className="w-9 h-9 rounded-lg bg-[#F7F5F0] group-hover:bg-[#EDE4D2] text-[#123C35] flex items-center justify-center transition-colors mb-3">
+                <div className="w-9 h-9 rounded-lg bg-[#F7F5F0] group-hover:bg-[#EDE4D2] text-[#123C35] flex items-center justify-center transition-colors duration-200 mb-3 group-hover:scale-105">
                   <Icon className="w-4 h-4 stroke-[2]" />
                 </div>
                 <h3 className="text-sm font-bold text-[#171A19] group-hover:text-[#123C35] transition-colors leading-snug">
@@ -254,7 +254,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <div className="flex items-center justify-between text-xs text-[#5A625C] pt-2 border-t border-[#E4E1DA]/60">
                 <span>{count}</span>
-                <span className="font-bold text-[#123C35] opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="font-bold text-[#123C35] opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-1 group-hover:translate-x-0">
                   Browse →
                 </span>
               </div>
@@ -322,7 +322,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 key={brand.name}
                 type="button"
                 onClick={() => onNavigate('shop', undefined, { brand: brand.name })}
-                className="group p-4 bg-[#F7F5F0] hover:bg-[#EDE4D2] border border-[#E4E1DA] hover:border-[#123C35] rounded-xl text-center transition-all cursor-pointer"
+                className="group p-4 bg-[#F7F5F0] hover:bg-[#EDE4D2] border border-[#E4E1DA] hover:border-[#123C35] rounded-xl text-center transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-xs cursor-pointer"
               >
                 <span className="block text-sm font-bold text-[#171A19] group-hover:text-[#123C35]">
                   {brand.name}

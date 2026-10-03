@@ -52,7 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
   return (
     <article
       onClick={() => onSelect(product.id)}
-      className="group bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] rounded-xl overflow-hidden flex flex-col justify-between transition-colors duration-200 cursor-pointer shadow-xs hover:shadow-md"
+      className="group bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-lg cursor-pointer shadow-xs"
     >
       {/* Product Image Frame */}
       <div className="relative aspect-square bg-[#FFFFFF] overflow-hidden flex items-center justify-center p-6 border-b border-[#E4E1DA]/60">
@@ -77,7 +77,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
         <button
           type="button"
           onClick={handleWishlistToggle}
-          className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer border ${
+          className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer border ${
             isFavorited
               ? 'bg-[#123C35] text-[#FFFFFF] border-[#123C35]'
               : 'bg-[#FFFFFF] hover:bg-[#F7F5F0] text-[#666B67] hover:text-[#171A19] border-[#E4E1DA] shadow-xs'
@@ -95,7 +95,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
           height={320}
           loading="lazy"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-contain transition-transform duration-300 ease-out group-hover:scale-102"
+          className="w-full h-full object-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 will-change-transform"
         />
 
         {/* Out of Stock Overlay */}
@@ -164,12 +164,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
             type="button"
             onClick={handleQuickAdd}
             disabled={isOutOfStock || isAdding}
-            className={`w-full py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            className={`w-full py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.97] ${
               justAdded
-                ? 'bg-[#2F6B57] text-[#FFFFFF]'
+                ? 'bg-[#2F6B57] text-[#FFFFFF] animate-subtle-pulse'
                 : isOutOfStock
                 ? 'bg-[#E4E1DA] text-[#5A625C] cursor-not-allowed'
-                : 'bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] shadow-xs active:scale-[0.99]'
+                : 'bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] shadow-xs'
             }`}
             aria-label={
               isOutOfStock

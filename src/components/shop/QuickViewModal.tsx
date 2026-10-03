@@ -108,13 +108,13 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#171A19]/50 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-[#171A19]/50 backdrop-blur-xs transition-opacity animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-3xl bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 my-auto">
+      <div className="relative w-full max-w-3xl bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl shadow-2xl overflow-hidden z-10 animate-modal-pop my-auto">
         {/* Close Button */}
         <button
           type="button"

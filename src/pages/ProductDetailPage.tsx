@@ -185,11 +185,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </button>
 
             <img
+              key={selectedImage || product.image}
               src={selectedImage || product.image}
               alt={product.name}
               width={600}
               height={440}
-              className="w-full h-full object-contain max-h-[440px] transition-all duration-300"
+              className="w-full h-full object-contain max-h-[440px] animate-fade-in transition-all duration-300"
             />
           </div>
 
@@ -201,7 +202,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => setSelectedImage(img)}
-                  className={`w-20 h-20 bg-[#FFFFFF] border rounded-xl p-2 shrink-0 transition-all cursor-pointer ${
+                  className={`w-20 h-20 bg-[#FFFFFF] border rounded-xl p-2 shrink-0 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${
                     selectedImage === img
                       ? 'border-[#123C35] ring-2 ring-[#123C35]/20 shadow-xs'
                       : 'border-[#E4E1DA] hover:border-[#171A19]/40 opacity-70 hover:opacity-100'
@@ -346,7 +347,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 type="button"
                 onClick={handleAddToCart}
                 disabled={isOutOfStock || isAdding}
-                className="flex-1 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>{isAdding ? 'Adding...' : 'Add to Bag'}</span>
@@ -355,7 +356,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <button
                 type="button"
                 onClick={() => toggleWishlist(product.id, product.name)}
-                className={`p-3.5 border rounded-lg transition-colors cursor-pointer flex items-center justify-center ${
+                className={`p-3.5 border rounded-lg transition-all duration-200 cursor-pointer flex items-center justify-center active:scale-90 ${
                   isFavorited
                     ? 'border-[#123C35] bg-[#123C35] text-[#FFFFFF]'
                     : 'border-[#E4E1DA] hover:border-[#171A19] text-[#666B67] hover:text-[#171A19] bg-[#FFFFFF]'
@@ -371,7 +372,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <button
                 type="button"
                 onClick={handleBuyNow}
-                className="w-full py-3 bg-[#FFFFFF] border border-[#171A19] hover:bg-[#171A19] text-[#171A19] hover:text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-[#FFFFFF] border border-[#171A19] hover:bg-[#171A19] text-[#171A19] hover:text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Buy Now</span>
               </button>

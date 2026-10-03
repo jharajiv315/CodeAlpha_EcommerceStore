@@ -253,7 +253,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
             {/* Popover Card */}
             {priceDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl shadow-xl p-4 z-30 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 top-full mt-2 w-80 bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl shadow-xl p-4 z-30 space-y-3 animate-fade-slide-down">
                 <PriceRangeSlider
                   minPrice={filters.minPrice}
                   maxPrice={filters.maxPrice}
@@ -294,7 +294,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
             {/* Rating Dropdown Menu */}
             {ratingDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl shadow-xl p-2 z-30 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl shadow-xl p-2 z-30 space-y-1 animate-fade-slide-down">
                 <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#666B67]">
                   Customer Rating
                 </div>
@@ -456,10 +456,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       {mobileFilterOpen && (
         <div className="fixed inset-0 z-50 flex justify-end lg:hidden">
           <div
-            className="fixed inset-0 bg-[#171A19]/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-[#171A19]/40 backdrop-blur-xs transition-opacity animate-fade-in"
             onClick={() => setMobileFilterOpen(false)}
           />
-          <div className="relative w-full max-w-xs bg-[#FFFFFF] h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10">
+          <div className="relative w-full max-w-xs bg-[#FFFFFF] h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-drawer-right">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#E4E1DA] mb-6">
                 <h3 className="text-base font-semibold text-[#171A19]">Filters & Refinements</h3>

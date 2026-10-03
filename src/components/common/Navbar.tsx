@@ -340,7 +340,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Search Input Drawer (Visible when toggled on mobile) */}
         {isMobileSearchOpen && (
-          <div className="md:hidden px-4 pb-3 pt-1 border-t border-[#E4E1DA] bg-[#FFFFFF]">
+          <div className="md:hidden px-4 pb-3 pt-1 border-t border-[#E4E1DA] bg-[#FFFFFF] animate-fade-slide-down">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 type="text"
@@ -391,12 +391,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Customer Support Modal */}
       {supportModalOpen && (
         <div
-          className="fixed inset-0 z-50 overflow-y-auto bg-[#171A19]/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 overflow-y-auto bg-[#171A19]/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
           role="dialog"
           aria-modal="true"
           aria-labelledby="support-modal-title"
         >
-          <div className="bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+          <div className="bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative animate-modal-pop">
             <button
               type="button"
               onClick={() => setSupportModalOpen(false)}
