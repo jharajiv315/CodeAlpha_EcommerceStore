@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { DEPARTMENTS, TOP_BRANDS, QUICK_PROMOTIONS } from '../../config/navigation';
 import { ProductCategory } from '../../types';
-import { ArrowRight, ChevronRight, Tag, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronRight, Tag } from 'lucide-react';
 
 interface MegaMenuProps {
   isOpen: boolean;
@@ -142,7 +142,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
 
             <div className="p-4 bg-[#FFFFFF] border border-[#E4E1DA] rounded-xl space-y-2">
               <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#B89B5E]">
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>2026 Collection</span>
               </div>
               <p className="text-xs text-[#171A19] font-medium leading-snug">

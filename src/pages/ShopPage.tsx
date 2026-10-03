@@ -8,7 +8,7 @@ import { ProductGrid } from '../components/shop/ProductGrid';
 import { RecentlyViewedSection } from '../components/shop/RecentlyViewedSection';
 import { recordRecentlyViewed } from '../utils/recentlyViewed';
 import { Breadcrumb } from '../components/common/Breadcrumb';
-import { Check, Tag, Sparkles } from 'lucide-react';
+import { Check, Tag } from 'lucide-react';
 
 interface ShopPageProps {
   initialCategory?: ProductCategory;

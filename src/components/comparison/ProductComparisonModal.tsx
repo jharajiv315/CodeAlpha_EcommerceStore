@@ -11,7 +11,6 @@ import {
   ShoppingBag,
   Plus,
   Scale,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   Truck,
@@ -140,7 +139,6 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({
                   onChange={(e) => setHighlightDifferences(e.target.checked)}
                   className="accent-[#123C35] w-3.5 h-3.5 rounded cursor-pointer"
                 />
-                <Sparkles className="w-3.5 h-3.5 text-[#B89B5E]" />
                 <span>Highlight Differences</span>
               </label>
             )}

@@ -15,7 +15,6 @@ import {
   Plus,
   Minus,
   ShoppingBag,
-  Zap,
   Truck,
   ShieldCheck,
   RotateCcw,
@@ -374,8 +373,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onClick={handleBuyNow}
                 className="w-full py-3 bg-[#FFFFFF] border border-[#171A19] hover:bg-[#171A19] text-[#171A19] hover:text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Zap className="w-3.5 h-3.5 fill-current" />
-                <span>Buy Now with 1-Click</span>
+                <span>Buy Now</span>
               </button>
             )}
 

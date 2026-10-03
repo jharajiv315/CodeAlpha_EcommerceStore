@@ -16,7 +16,6 @@ import {
   ArrowRight,
   Check,
   AlertCircle,
-  Sparkles,
   Eye,
   EyeOff,
   User as UserIcon,
@@ -266,7 +265,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
             onClick={handleFastFill}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EDE4D2] hover:bg-[#E4D5BC] text-[#123C35] rounded-lg text-xs font-semibold tracking-wide transition-colors cursor-pointer self-start sm:self-auto"
           >
-            <Sparkles className="w-3.5 h-3.5" />
             <span>Fast-fill sample address</span>
           </button>
         )}
@@ -447,7 +445,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               <div className="pt-4 border-t border-[#E4E1DA] space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-[#666B67]">
                   <span className="font-semibold uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#123C35]" />
                     <span>Quick Evaluation Logins</span>
                   </span>
                   <span>Pre-configured credentials</span>

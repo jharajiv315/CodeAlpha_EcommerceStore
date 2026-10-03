@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/common/Breadcrumb';
-import { Lock, Mail, User as UserIcon, ArrowRight, Sparkles, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, User as UserIcon, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 interface AuthPageProps {
   onNavigateHome: () => void;
@@ -104,7 +104,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
         {/* Quick Sample Account Bar */}
         <div className="p-3 bg-[#F7F5F0] border border-[#E4E1DA] rounded-xl text-xs space-y-2">
           <div className="flex items-center gap-1.5 text-[#123C35] font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
             <span>Quick Sign In with Sample Account:</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">

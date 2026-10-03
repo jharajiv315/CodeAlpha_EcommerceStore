@@ -12,7 +12,6 @@ import {
   ChevronRight,
   ChevronDown,
   Tag,
-  Sparkles,
   HelpCircle,
   ShieldCheck,
 } from 'lucide-react';
@@ -123,7 +122,6 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 className="w-full flex items-center justify-between py-2 px-3 hover:bg-[#F7F5F0] text-[#171A19] font-semibold text-sm rounded-lg transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <Sparkles className="w-4 h-4 text-[#B89B5E]" />
                   <span>New Arrivals 2026</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#666B67]/50" />

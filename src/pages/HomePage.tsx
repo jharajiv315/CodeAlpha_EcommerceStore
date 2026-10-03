@@ -19,7 +19,6 @@ import {
   RotateCcw,
   CreditCard,
   Tag,
-  Sparkles,
 } from 'lucide-react';
 import { formatPrice } from '../utils/currency';
 
@@ -94,7 +93,6 @@ export const HomePage: React.FC<HomePageProps> = ({
             {/* Left Content Column */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#123C35] bg-[#EDE4D2] px-3 py-1 rounded-sm">
-                <Sparkles className="w-3.5 h-3.5 text-[#123C35]" />
                 <span>The 2026 Electronics Marketplace</span>
               </div>
 
@@ -441,7 +439,6 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#123C35] mb-1">
-              <Sparkles className="w-3.5 h-3.5 text-[#B89B5E]" />
               <span>Latest Releases</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
