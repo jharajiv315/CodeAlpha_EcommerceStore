@@ -160,7 +160,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           </div>
           <div>
             <h4 className="text-base font-semibold text-[#171A19]">Explore Gear</h4>
-            <span className="text-xs text-[#123C35] font-medium">New arrivals & instruments →</span>
+            <span className="text-xs text-[#123C35] font-medium">New arrivals & electronics →</span>
           </div>
         </button>
       </div>

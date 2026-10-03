@@ -3,9 +3,9 @@ import { productService } from '../services/productService';
 import { Product, ProductCategory } from '../types';
 import { ProductCard } from '../components/shop/ProductCard';
 import { ProductGridSkeleton } from '../components/common/SkeletonLoader';
+import { TOP_BRANDS } from '../config/navigation';
 import {
   ArrowRight,
-  Compass,
   Headphones,
   Laptop,
   Gamepad2,
@@ -14,12 +14,21 @@ import {
   Cpu,
   Camera,
   Home,
-  CheckCircle2,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  CreditCard,
+  Tag,
+  Sparkles,
 } from 'lucide-react';
 import { formatPrice } from '../utils/currency';
 
 interface HomePageProps {
-  onNavigate: (route: string, category?: ProductCategory) => void;
+  onNavigate: (
+    route: string,
+    category?: ProductCategory,
+    options?: { brand?: string; search?: string; dealsOnly?: boolean; newOnly?: boolean }
+  ) => void;
   onSelectProduct: (productId: string) => void;
 }
 
@@ -28,6 +37,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onSelectProduct,
 }) => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [dealProducts, setDealProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [spotlightProduct, setSpotlightProduct] = useState<Product | null>(null);
   const [totalProducts, setTotalProducts] = useState(108);
@@ -42,6 +52,18 @@ export const HomePage: React.FC<HomePageProps> = ({
       setFeaturedProducts(featured.slice(0, 4));
       setNewArrivals(arrivals.slice(0, 4));
       setTotalProducts(all.length);
+
+      // Find top discounted products for the Deals landmark
+      const deals = all
+        .filter(p => p.originalPrice && p.originalPrice > p.price)
+        .sort((a, b) => {
+          const discA = ((a.originalPrice! - a.price) / a.originalPrice!) * 100;
+          const discB = ((b.originalPrice! - b.price) / b.originalPrice!) * 100;
+          return discB - discA;
+        })
+        .slice(0, 4);
+      setDealProducts(deals);
+
       // Pick a flagship spotlight product
       const spotlight =
         featured.find(p => p.id === 'sony-wh-1000xm5') ||
@@ -57,97 +79,95 @@ export const HomePage: React.FC<HomePageProps> = ({
   const categories: { name: ProductCategory; icon: any; desc: string; count: string }[] = [
     { name: 'Smartphones', icon: Smartphone, desc: 'Flagship 5G devices from Apple, Samsung, Google & OnePlus', count: '12+ models' },
     { name: 'Laptops', icon: Laptop, desc: 'M3 MacBooks, Dell XPS workstations & ROG gaming rigs', count: '12+ models' },
-    { name: 'Headphones & Audio', icon: Headphones, desc: 'Sony WH-series, AirPods Max & audiophile monitors', count: '12+ models' },
+    { name: 'Headphones & Audio', icon: Headphones, desc: 'Sony WH-series, AirPods Pro & audiophile monitors', count: '12+ models' },
     { name: 'TVs & Monitors', icon: Tv, desc: 'LG OLED evo, Samsung Neo QLED & ROG gaming displays', count: '10+ models' },
-    { name: 'Gaming', icon: Gamepad2, desc: 'PlayStation 5, Xbox Series X, Nintendo & Razer peripherals', count: '10+ models' },
-    { name: 'PC Components', icon: Cpu, desc: 'NVIDIA RTX 40-series, AMD Ryzen 7800X3D & Samsung SSDs', count: '10+ models' },
-    { name: 'Cameras', icon: Camera, desc: 'Sony Alpha, Canon EOS R, Nikon Z & DJI Osmo Pocket 3', count: '8+ models' },
+    { name: 'Gaming', icon: Gamepad2, desc: 'PlayStation 5, Xbox Series X, Nintendo & pro peripherals', count: '10+ models' },
+    { name: 'PC Components', icon: Cpu, desc: 'NVIDIA RTX 40-series, Intel Core i9 & AMD Ryzen processors', count: '10+ models' },
+    { name: 'Cameras', icon: Camera, desc: 'Sony Alpha, Canon EOS R, Nikon Z & DJI creator gear', count: '8+ models' },
     { name: 'Networking & Smart Home', icon: Home, desc: 'Wi-Fi 7 mesh routers, Google Nest & Philips Hue systems', count: '8+ models' },
   ];
 
   return (
-    <div className="space-y-20 sm:space-y-28 pb-16">
-      {/* SECTION 1 — HERO */}
-      <section className="relative overflow-hidden pt-8 sm:pt-14 pb-12 sm:pb-16 border-b border-[#E4E1DA]">
+    <div className="space-y-16 sm:space-y-24 pb-16">
+      {/* SECTION 1 — COMMERCIAL HERO */}
+      <section className="relative bg-[#FFFFFF] border-b border-[#E4E1DA] pt-8 sm:pt-14 pb-12 sm:pb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* Left Content Column */}
-            <div className="lg:col-span-6 space-y-6 sm:space-y-8">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#123C35] bg-[#EDE4D2] px-3 py-1 rounded-sm">
-                <span>The 2026 Electronics Collection</span>
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#123C35] bg-[#EDE4D2] px-3 py-1 rounded-sm">
+                <Sparkles className="w-3.5 h-3.5 text-[#123C35]" />
+                <span>The 2026 Electronics Marketplace</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#171A19] leading-[1.08] text-balance">
-                Engineered for the way you live.
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#171A19] leading-[1.1] text-balance">
+                Official electronics. Direct from top brands.
               </h1>
 
               <p className="text-base sm:text-lg text-[#666B67] leading-relaxed max-w-xl font-normal">
-                Authentic flagship electronics from the world's finest engineering brands. Apple, Sony, Samsung, NVIDIA, Bose, and Dell — curated with transparent Indian retail pricing and official warranty.
+                Discover authentic smartphones, high-performance laptops, studio headphones, and gaming gear. 100% genuine inventory with official Indian warranty and insured express dispatch.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => onNavigate('shop')}
-                  className="px-8 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-semibold tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-3 cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0"
+                  className="px-7 py-3.5 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-bold tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Shop Collection</span>
+                  <span>Browse All Products ({totalProducts})</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => {
-                    const el = document.getElementById('categories-section');
-                    el?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-8 py-3.5 bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#171A19] text-[#171A19] text-xs font-medium tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => onNavigate('shop', undefined, { dealsOnly: true })}
+                  className="px-7 py-3.5 bg-[#FFFFFF] border border-[#123C35] text-[#123C35] hover:bg-[#EDE4D2]/40 text-xs font-bold tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Compass className="w-4 h-4 text-[#666B67]" />
-                  <span>Explore Categories</span>
+                  <Tag className="w-4 h-4 text-[#123C35]" />
+                  <span>Today's Deals (Up to 34% Off)</span>
                 </button>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="pt-4 border-t border-[#E4E1DA]/60 flex items-center gap-8 text-xs text-[#666B67]">
-                <div>
-                  <strong className="text-[#171A19] font-semibold block text-sm">₹2,000+</strong>
-                  <span>Free insured shipping</span>
+              {/* Verified Trust Strip */}
+              <div className="pt-6 border-t border-[#E4E1DA] grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-[#666B67]">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-[#123C35] shrink-0" />
+                  <span>Official Warranty</span>
                 </div>
-                <div className="h-6 w-[1px] bg-[#E4E1DA]" />
-                <div>
-                  <strong className="text-[#171A19] font-semibold block text-sm">Official</strong>
-                  <span>Brand India warranty</span>
+                <div className="flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-[#123C35] shrink-0" />
+                  <span>Free Over ₹2,000</span>
                 </div>
-                <div className="h-6 w-[1px] bg-[#E4E1DA] hidden sm:block" />
-                <div className="hidden sm:block">
-                  <strong className="text-[#171A19] font-semibold block text-sm">100%</strong>
-                  <span>Authentic products</span>
+                <div className="flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4 text-[#123C35] shrink-0" />
+                  <span>7-Day Replacement</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-[#123C35] shrink-0" />
+                  <span>UPI, Cards & COD</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Hero Visual Composition */}
-            <div className="lg:col-span-6 relative">
-              <div className="relative bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl p-6 sm:p-10 shadow-sm overflow-hidden">
-                {/* Visual Label */}
-                <div className="flex items-center justify-between pb-6 border-b border-[#E4E1DA]">
-                  <span className="text-xs uppercase tracking-widest font-semibold text-[#123C35]">
-                    Spotlight Product
+            {/* Right Hero Commercial Product Showcase */}
+            <div className="lg:col-span-5">
+              <div className="bg-[#F7F5F0] border border-[#E4E1DA] rounded-2xl p-6 shadow-sm">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E4E1DA]">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#123C35]">
+                    Flagship Spotlight
                   </span>
-                  <span className="text-xs font-medium text-[#666B67]">
-                    {spotlightProduct?.brand || 'Sony'} Flagship
+                  <span className="text-xs font-semibold text-[#171A19]">
+                    {spotlightProduct?.brand || 'Sony'}
                   </span>
                 </div>
 
-                {/* Hero Showcase Product */}
-                <div className="py-6 flex items-center justify-center">
-                  <div
-                    onClick={() => {
-                      if (spotlightProduct) onSelectProduct(spotlightProduct.id);
-                    }}
-                    className="group/hero cursor-pointer relative w-full max-w-sm aspect-square bg-[#F7F5F0] rounded-xl p-6 flex flex-col items-center justify-center transition-all duration-300 hover:border-[#123C35]"
-                  >
+                <div
+                  onClick={() => {
+                    if (spotlightProduct) onSelectProduct(spotlightProduct.id);
+                  }}
+                  className="group/hero cursor-pointer py-4 flex flex-col items-center justify-center"
+                >
+                  <div className="w-full aspect-square max-w-[280px] bg-[#FFFFFF] rounded-xl p-6 flex items-center justify-center border border-[#E4E1DA] group-hover/hero:border-[#123C35] transition-colors">
                     <img
                       src={
                         spotlightProduct?.image ||
@@ -157,31 +177,33 @@ export const HomePage: React.FC<HomePageProps> = ({
                       className="w-full h-full object-contain transition-transform duration-300 group-hover/hero:scale-105"
                       loading="eager"
                     />
-                    <div className="absolute bottom-4 left-4 right-4 bg-[#FFFFFF]/95 backdrop-blur-xs p-3 rounded-lg border border-[#E4E1DA] flex items-center justify-between shadow-xs">
-                      <div className="truncate mr-2">
-                        <p className="text-xs font-semibold text-[#171A19] truncate">
-                          {spotlightProduct?.name || 'Sony WH-1000XM5 Wireless Headphones'}
-                        </p>
-                        <span className="text-xs text-[#123C35] font-bold tabular-nums">
+                  </div>
+
+                  <div className="w-full mt-4 bg-[#FFFFFF] p-3 rounded-xl border border-[#E4E1DA] flex items-center justify-between shadow-2xs">
+                    <div className="truncate mr-2">
+                      <p className="text-xs font-bold text-[#171A19] truncate">
+                        {spotlightProduct?.name || 'Sony WH-1000XM5 Wireless Headphones'}
+                      </p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs text-[#123C35] font-extrabold tabular-nums">
                           {spotlightProduct ? formatPrice(spotlightProduct.price) : '₹27,990'}
                         </span>
+                        {spotlightProduct?.originalPrice && (
+                          <span className="text-[10px] text-[#8C928D] line-through tabular-nums">
+                            {formatPrice(spotlightProduct.originalPrice)}
+                          </span>
+                        )}
                       </div>
-                      <span className="text-[11px] font-semibold text-[#123C35] uppercase tracking-wide group-hover/hero:underline flex items-center gap-1 shrink-0">
-                        View Details →
-                      </span>
                     </div>
+                    <span className="text-xs font-bold text-[#123C35] bg-[#EDE4D2] px-2.5 py-1 rounded shrink-0 group-hover/hero:bg-[#123C35] group-hover/hero:text-[#FFFFFF] transition-colors">
+                      View →
+                    </span>
                   </div>
                 </div>
 
-                {/* Subtle Editorial Accent Note */}
-                <div className="pt-4 border-t border-[#E4E1DA] flex items-center justify-between text-xs text-[#666B67]">
-                  <span className="truncate max-w-[60%]">
-                    {spotlightProduct?.tagline || 'Industry-leading noise cancellation'}
-                  </span>
-                  <span className="text-[#123C35] font-medium flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    In stock · Express dispatch
-                  </span>
+                <div className="pt-3 border-t border-[#E4E1DA] flex items-center justify-between text-[11px] text-[#666B67]">
+                  <span>Ready for immediate dispatch</span>
+                  <span className="font-semibold text-[#2F6B57]">In stock</span>
                 </div>
               </div>
             </div>
@@ -189,50 +211,50 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 2 — CATEGORY NAVIGATION */}
-      <section id="categories-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
+      {/* SECTION 2 — SHOP BY CATEGORY */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[#171A19] tracking-tight">
-              Featured Categories
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
+              Shop by Category
             </h2>
             <p className="text-xs sm:text-sm text-[#666B67] mt-1">
-              Browse genuine consumer electronics engineered by industry leaders.
+              Browse genuine consumer technology across major product categories.
             </p>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('shop')}
-            className="text-xs font-semibold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1.5 cursor-pointer underline underline-offset-4"
+            className="text-xs font-bold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1 cursor-pointer underline underline-offset-4"
           >
-            <span>View all {totalProducts} products</span>
+            <span>All {totalProducts} Products</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {categories.map(({ name, icon: Icon, desc, count }) => (
             <button
               key={name}
               type="button"
               onClick={() => onNavigate('shop', name)}
-              className="group text-left bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] p-6 rounded-xl transition-all duration-200 hover:-translate-y-1 cursor-pointer flex flex-col justify-between h-48"
+              className="group text-left bg-[#FFFFFF] border border-[#E4E1DA] hover:border-[#123C35] p-5 rounded-xl transition-all cursor-pointer flex flex-col justify-between h-44 shadow-2xs hover:shadow-sm"
             >
               <div>
-                <div className="w-10 h-10 rounded-lg bg-[#F7F5F0] group-hover:bg-[#EDE4D2] text-[#123C35] flex items-center justify-center transition-colors mb-4">
-                  <Icon className="w-5 h-5 stroke-[1.6]" />
+                <div className="w-9 h-9 rounded-lg bg-[#F7F5F0] group-hover:bg-[#EDE4D2] text-[#123C35] flex items-center justify-center transition-colors mb-3">
+                  <Icon className="w-4 h-4 stroke-[2]" />
                 </div>
-                <h3 className="text-base font-semibold text-[#171A19] group-hover:text-[#123C35] transition-colors">
+                <h3 className="text-sm font-bold text-[#171A19] group-hover:text-[#123C35] transition-colors leading-snug">
                   {name}
                 </h3>
-                <p className="text-xs text-[#666B67] mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-[#666B67] mt-1 line-clamp-2 leading-relaxed hidden sm:block">
                   {desc}
                 </p>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-[#666B67] pt-2 border-t border-[#E4E1DA]/50">
+              <div className="flex items-center justify-between text-xs text-[#8C928D] pt-2 border-t border-[#E4E1DA]/60">
                 <span>{count}</span>
-                <span className="font-semibold text-[#123C35] opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="font-bold text-[#123C35] opacity-0 group-hover:opacity-100 transition-opacity">
                   Browse →
                 </span>
               </div>
@@ -241,24 +263,97 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 3 — FEATURED PRODUCTS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-[#123C35] mb-1">
-              Handpicked Essentials
+      {/* SECTION 3 — TOP ELECTRONICS DEALS */}
+      {dealProducts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#2F6B57] mb-1">
+                <Tag className="w-3.5 h-3.5" />
+                <span>Special Offers</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
+                Top Electronics Deals
+              </h2>
+              <p className="text-xs sm:text-sm text-[#666B67] mt-1">
+                Authentic retail markdowns on premium laptops, audio gear, and flagship displays.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[#171A19] tracking-tight">
-              Featured Products
+            <button
+              type="button"
+              onClick={() => onNavigate('shop', undefined, { dealsOnly: true })}
+              className="text-xs font-bold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1 cursor-pointer underline underline-offset-4"
+            >
+              <span>View All Deals</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {dealProducts.map(product => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onSelect={onSelectProduct}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* SECTION 4 — FEATURED BRANDS */}
+      <section className="bg-[#FFFFFF] border-y border-[#E4E1DA] py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#123C35]">
+              Authorized Retail Partnerships
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
+              Shop by Leading Brand
+            </h2>
+            <p className="text-xs sm:text-sm text-[#666B67]">
+              Every device is sourced directly through official distribution with complete warranty.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {TOP_BRANDS.map(brand => (
+              <button
+                key={brand.name}
+                type="button"
+                onClick={() => onNavigate('shop', undefined, { brand: brand.name })}
+                className="group p-4 bg-[#F7F5F0] hover:bg-[#EDE4D2] border border-[#E4E1DA] hover:border-[#123C35] rounded-xl text-center transition-all cursor-pointer"
+              >
+                <span className="block text-sm font-bold text-[#171A19] group-hover:text-[#123C35]">
+                  {brand.name}
+                </span>
+                <span className="block text-[11px] text-[#666B67] mt-0.5">
+                  {brand.count} items
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — BEST SELLERS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-[#123C35] mb-1">
+              Top Customer Rated
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
+              Best Sellers
             </h2>
             <p className="text-xs sm:text-sm text-[#666B67] mt-1">
-              Everyday essentials, carefully selected for durability and craftsmanship.
+              Proven everyday electronics favored by creators, professionals, and gamers.
             </p>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('shop')}
-            className="text-xs font-semibold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1.5 cursor-pointer underline underline-offset-4"
+            className="text-xs font-bold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1 cursor-pointer underline underline-offset-4"
           >
             <span>See entire collection</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -280,58 +375,84 @@ export const HomePage: React.FC<HomePageProps> = ({
         )}
       </section>
 
-      {/* SECTION 4 — EDITORIAL BRAND STORY */}
-      <section className="bg-[#FFFFFF] border-y border-[#E4E1DA] py-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8C6E2E]">
-            The Nexora Philosophy
-          </span>
+      {/* SECTION 6 — RETAIL TRUST & VALUE PROPOSITION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl p-8 sm:p-12 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#123C35]">
+              The Nexora Retail Standard
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#171A19]">
+              Why Buy Consumer Technology at NEXORA
+            </h3>
+            <p className="text-xs sm:text-sm text-[#666B67]">
+              We eliminate counterfeit risks, hidden marketplace surcharges, and warranty ambiguity.
+            </p>
+          </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#171A19] tracking-tight text-balance leading-tight">
-            Better products. Less noise.
-          </h2>
-
-          <p className="text-base sm:text-lg text-[#666B67] leading-relaxed max-w-2xl mx-auto font-normal">
-            We reject the endless cycle of fragile disposable electronics and visual clutter.
-            Every instrument we craft or curate is designed around tactile honesty: cold aluminum,
-            full-grain leather, tactile switches, and repairable acoustic assemblies.
-          </p>
-
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-8 text-xs text-[#171A19]">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#123C35]" />
-              <span>Zero unnecessary plastics</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
+            <div className="p-5 bg-[#F7F5F0] rounded-xl border border-[#E4E1DA] space-y-2.5">
+              <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] text-[#123C35] flex items-center justify-center shadow-2xs">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-bold text-[#171A19]">Official India Warranty</h4>
+              <p className="text-xs text-[#666B67] leading-relaxed">
+                Direct warranty serviced at authorized Apple, Samsung, Sony, and Dell service centers nationwide.
+              </p>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#123C35]" />
-              <span>Calm, distraction-free interfaces</span>
+
+            <div className="p-5 bg-[#F7F5F0] rounded-xl border border-[#E4E1DA] space-y-2.5">
+              <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] text-[#123C35] flex items-center justify-center shadow-2xs">
+                <Truck className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-bold text-[#171A19]">Insured Express Delivery</h4>
+              <p className="text-xs text-[#666B67] leading-relaxed">
+                Tamper-evident packaging with air courier transit. Every high-value parcel is 100% insured.
+              </p>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#123C35]" />
-              <span>Lifetime design philosophy</span>
+
+            <div className="p-5 bg-[#F7F5F0] rounded-xl border border-[#E4E1DA] space-y-2.5">
+              <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] text-[#123C35] flex items-center justify-center shadow-2xs">
+                <RotateCcw className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-bold text-[#171A19]">7-Day Replacement</h4>
+              <p className="text-xs text-[#666B67] leading-relaxed">
+                Guaranteed replacement if your package experiences transit distress or out-of-the-box hardware issues.
+              </p>
+            </div>
+
+            <div className="p-5 bg-[#F7F5F0] rounded-xl border border-[#E4E1DA] space-y-2.5">
+              <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] text-[#123C35] flex items-center justify-center shadow-2xs">
+                <CreditCard className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-bold text-[#171A19]">Transparent Pricing</h4>
+              <p className="text-xs text-[#666B67] leading-relaxed">
+                All listed prices in INR include 18% GST with zero surprise checkout fees or convenience surcharges.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 5 — NEW ARRIVALS */}
+      {/* SECTION 7 — NEW ARRIVALS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-[#123C35] mb-1">
-              Fresh From The Studio
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#123C35] mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-[#B89B5E]" />
+              <span>Latest Releases</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[#171A19] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#171A19] tracking-tight">
               New Arrivals
             </h2>
             <p className="text-xs sm:text-sm text-[#666B67] mt-1">
-              The latest additions to our focused workplace ecosystem.
+              The newest additions to our consumer technology catalog.
             </p>
           </div>
           <button
             type="button"
-            onClick={() => onNavigate('shop')}
-            className="text-xs font-semibold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1.5 cursor-pointer underline underline-offset-4"
+            onClick={() => onNavigate('shop', undefined, { newOnly: true })}
+            className="text-xs font-bold uppercase tracking-wider text-[#123C35] hover:text-[#0D302A] flex items-center gap-1 cursor-pointer underline underline-offset-4"
           >
             <span>Explore all new releases</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -355,3 +476,4 @@ export const HomePage: React.FC<HomePageProps> = ({
     </div>
   );
 };
+

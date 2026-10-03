@@ -60,7 +60,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
       <div className="bg-[#FFFFFF] border border-[#E4E1DA] rounded-2xl p-6 sm:p-8 space-y-6">
         <h3 className="text-base font-semibold text-[#171A19] pb-4 border-b border-[#E4E1DA] flex items-center gap-2">
           <Package className="w-4 h-4 text-[#123C35]" />
-          <span>Purchased Instruments & Accessories</span>
+          <span>Ordered Electronics & Accessories</span>
         </h3>
 
         <div className="divide-y divide-[#E4E1DA]/60">

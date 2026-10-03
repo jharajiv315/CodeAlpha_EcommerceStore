@@ -50,6 +50,10 @@ function AppShell() {
   const [route, setRoute] = useState<string>('home');
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | undefined>(undefined);
+  const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
+  const [activeSearch, setActiveSearch] = useState<string | undefined>(undefined);
+  const [dealsOnly, setDealsOnly] = useState<boolean>(false);
+  const [newOnly, setNewOnly] = useState<boolean>(false);
   const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
 
   // Sync with browser hash on load and hashchange
@@ -84,7 +88,16 @@ function AppShell() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const navigate = (newRoute: string, category?: ProductCategory) => {
+  const navigate = (
+    newRoute: string,
+    category?: ProductCategory,
+    options?: { brand?: string; search?: string; dealsOnly?: boolean; newOnly?: boolean }
+  ) => {
+    setSelectedBrand(options?.brand);
+    setActiveSearch(options?.search);
+    setDealsOnly(options?.dealsOnly ?? false);
+    setNewOnly(options?.newOnly ?? false);
+
     if (newRoute === 'home') {
       window.location.hash = '';
       setRoute('home');
@@ -140,6 +153,10 @@ function AppShell() {
         {route === 'shop' && (
           <ShopPage
             initialCategory={selectedCategory}
+            initialBrand={selectedBrand}
+            initialSearch={activeSearch}
+            initialDealsOnly={dealsOnly}
+            initialNewOnly={newOnly}
             onNavigateHome={() => navigate('home')}
             onSelectProduct={handleSelectProduct}
           />

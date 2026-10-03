@@ -3,67 +3,58 @@ import { ProductReview } from '../types';
 const STORAGE_KEY = 'nexora_reviews_v1';
 
 const SEED_REVIEWS: Record<string, Omit<ProductReview, 'id' | 'productId'>[]> = {
-  'prod-1': [
+  'sony-wh-1000xm5': [
     {
-      author: 'Marcus Vance',
+      author: 'Vikram Malhotra',
       rating: 5,
-      comment: 'The planar magnetic drivers provide soundstage separation I have never heard in closed-back cans before. The walnut acoustic chambers feel artisanal and warm.',
+      comment: 'The active noise cancellation is unmatched during metro and flight commutes. Multi-point connection between my MacBook and iPhone switches instantly. Easily 30 hours of battery life.',
       createdAt: '2026-09-14T10:30:00Z',
       verifiedPurchase: true,
     },
     {
-      author: 'Evelyn Shaw',
+      author: 'Pooja Iyer',
       rating: 5,
-      comment: 'Incredible acoustic balance. Bass is tight without bleeding into the mid-range vocals. The leather padding is comfortable even during 6-hour master recording sessions.',
+      comment: 'Extremely lightweight and comfortable for all-day office calls. Voice isolation microphones pick up my voice clearly even in noisy coworking spaces. Genuine Sony India warranty verified.',
       createdAt: '2026-09-22T14:15:00Z',
       verifiedPurchase: true,
     },
     {
-      author: 'Devon Reed',
+      author: 'Aditya Sen',
       rating: 4,
-      comment: 'Superb build quality and pristine sound. It is slightly on the heavier side due to the solid aluminum frame, but the headband distributes the weight well.',
+      comment: 'Audio quality with LDAC enabled is stellar. Bass response is deep and controlled. Comes with a sturdy travel case. Dispatched and delivered to Bengaluru within 48 hours.',
       createdAt: '2026-09-28T09:40:00Z',
       verifiedPurchase: true,
     },
   ],
-  'prod-2': [
+  'apple-iphone-16-pro-max': [
     {
-      author: 'Julian Thorne',
+      author: 'Rohan Mehra',
       rating: 5,
-      comment: 'The gasket mount gives every keystroke a deep, marble "thock" sound that feels therapeutic. The milled brass weight adds serious desk presence.',
+      comment: 'The Grade 5 titanium body feels noticeably balanced in hand. Battery easily lasts 1.5 days on heavy 5G usage. Camera button shortcut makes candid street photography effortless.',
       createdAt: '2026-09-18T16:20:00Z',
       verifiedPurchase: true,
     },
     {
-      author: 'Chloe Lin',
+      author: 'Ananya Sharma',
       rating: 5,
-      comment: 'Unbelievably good factory switches. No pinging or scratchiness out of the box. Easily the best mechanical board I have owned in 8 years of collecting.',
+      comment: 'Display brightness in peak outdoor Indian sunlight is unbelievable. Apple Care registration worked smoothly on activation. Delivered in tamper-evident security packaging.',
       createdAt: '2026-09-25T11:05:00Z',
       verifiedPurchase: true,
     },
   ],
-  'prod-3': [
+  'apple-macbook-pro-16-m3-max': [
     {
-      author: 'Aaron K.',
+      author: 'Karthik Raman',
       rating: 5,
-      comment: 'The 360-degree aluminum volume drum has the most satisfying tactile damping. Connected seamlessly via optical to my studio monitor system.',
+      comment: 'The M3 Max renders 8K ProRes timelines and Docker microservice stacks without spinning up fans. Liquid Retina XDR screen color accuracy is reference grade. Worth every rupee.',
       createdAt: '2026-09-10T12:00:00Z',
       verifiedPurchase: true,
     },
     {
-      author: 'Sophie M.',
-      rating: 4,
-      comment: 'Pure class on my credenza. The sound fills a 400 sq ft room with authoritative clarity. Bluetooth 5.3 range is rock solid throughout my apartment.',
-      createdAt: '2026-09-29T18:45:00Z',
-      verifiedPurchase: true,
-    },
-  ],
-  'prod-4': [
-    {
-      author: 'Rohan Mehra',
+      author: 'Devika Nair',
       rating: 5,
-      comment: 'The machined knurled rotary dimmer gives you cinema-grade warmth adjustment. No flicker, zero hum, and heavy architectural base prevents tipping.',
-      createdAt: '2026-09-20T08:30:00Z',
+      comment: '128GB unified memory allows local LLM quantization and training with zero memory swapping. Keyboard tactile travel is superb. Official Indian retail unit.',
+      createdAt: '2026-09-29T18:45:00Z',
       verifiedPurchase: true,
     },
   ],
@@ -73,14 +64,14 @@ const DEFAULT_FALLBACK_REVIEWS: Omit<ProductReview, 'id' | 'productId'>[] = [
   {
     author: 'Kavita Sundaram',
     rating: 5,
-    comment: 'Exceptional craftsmanship. The tactile feel and minimalist finishing exceeded expectations. Packaging was immaculate with cloth dust sleeves.',
+    comment: '100% genuine sealed retail unit with valid manufacturer warranty. Dispatched via express courier and delivered within 3 days. Excellent customer service support.',
     createdAt: '2026-09-15T15:20:00Z',
     verifiedPurchase: true,
   },
   {
     author: 'Arjun Patel',
     rating: 5,
-    comment: 'Precision engineering at its finest. Worth every rupee for the durable tactile materials and attention to micro-details.',
+    comment: 'Exceptional build quality and authentic performance. Works exactly as advertised. Transparent pricing with GST invoice provided.',
     createdAt: '2026-09-24T17:10:00Z',
     verifiedPurchase: true,
   },

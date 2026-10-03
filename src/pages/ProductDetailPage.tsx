@@ -183,11 +183,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         {/* Right Column: Contiguous Purchase Module */}
         <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
           <div className="space-y-3 pb-6 border-b border-[#E4E1DA]">
-            {/* Category and Rating */}
+            {/* Brand, Category, SKU and Rating */}
             <div className="flex items-center justify-between text-xs text-[#666B67]">
-              <span className="uppercase tracking-wider font-semibold text-[#123C35]">
-                {product.category}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold uppercase tracking-wider text-[#123C35] bg-[#EDE4D2] px-2 py-0.5 rounded-xs">
+                  {product.brand || product.category}
+                </span>
+                {product.sku && (
+                  <span className="text-[11px] font-mono text-[#8C928D]">
+                    SKU: {product.sku}
+                  </span>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => {
@@ -198,33 +205,33 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 title="Scroll to client reviews"
               >
                 <span className="text-[#B89B5E]">★</span>
-                <span className="text-[#171A19] font-semibold group-hover:text-[#123C35]">{product.rating}</span>
+                <span className="text-[#171A19] font-bold group-hover:text-[#123C35]">{product.rating}</span>
                 <span>·</span>
-                <span className="underline underline-offset-2 decoration-[#E4E1DA] group-hover:decoration-[#123C35]">{product.reviewCount} verified reviews</span>
+                <span className="underline underline-offset-2 decoration-[#E4E1DA] group-hover:decoration-[#123C35]">{product.reviewCount?.toLocaleString() || 0} reviews</span>
               </button>
             </div>
 
             {/* Product Name */}
-            <h1 className="text-2xl sm:text-3xl font-semibold text-[#171A19] tracking-tight leading-snug">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#171A19] tracking-tight leading-snug">
               {product.name}
             </h1>
 
             {/* Tagline */}
-            <p className="text-sm text-[#666B67] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#666B67] leading-relaxed">
               {product.tagline}
             </p>
 
             {/* Price Row */}
             <div className="pt-2 flex items-baseline gap-3">
-              <span className="text-2xl sm:text-3xl font-bold text-[#171A19] tabular-nums">
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#171A19] tabular-nums">
                 {formatPrice(product.price)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <>
-                  <span className="text-base text-[#666B67] line-through tabular-nums">
+                  <span className="text-base text-[#8C928D] line-through tabular-nums">
                     {formatPrice(product.originalPrice)}
                   </span>
-                  <span className="text-xs font-semibold text-[#2F6B57] bg-[#EDE4D2] px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-[#2F6B57] bg-[#EDE4D2] px-2 py-0.5 rounded">
                     Save {discountPercent}%
                   </span>
                 </>
@@ -232,24 +239,35 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
 
             <p className="text-[11px] text-[#666B67]">
-              Inclusive of 18% GST ({formatPrice(Math.round(product.price * 0.18 / 1.18))}). Free courier delivery across India.
+              Inclusive of all taxes (18% GST included). Free courier shipping & transit insurance nationwide.
+            </p>
+          </div>
+
+          {/* Delivery Estimate Box */}
+          <div className="p-3 bg-[#F7F5F0] rounded-xl border border-[#E4E1DA] space-y-1 text-xs">
+            <div className="flex items-center gap-2 font-bold text-[#171A19]">
+              <Truck className="w-4 h-4 text-[#123C35]" />
+              <span>Estimated Delivery: 2–4 Business Days</span>
+            </div>
+            <p className="text-[11px] text-[#666B67] pl-6">
+              Dispatch from Mumbai / Bengaluru hub. Orders placed before 2 PM dispatched same-day.
             </p>
           </div>
 
           {/* Stock & Availability Status */}
           <div className="flex items-center gap-2 text-xs">
             {isOutOfStock ? (
-              <span className="text-[#A94747] font-semibold flex items-center gap-1.5">
+              <span className="text-[#A94747] font-bold flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#A94747]" />
-                Out of Stock — Register for restock notification
+                Out of Stock — Check back soon
               </span>
             ) : isLowStock ? (
-              <span className="text-[#A67C35] font-semibold flex items-center gap-1.5">
+              <span className="text-[#A67C35] font-bold flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#A67C35] animate-pulse" />
                 Only {product.stock} units remaining in stock
               </span>
             ) : (
-              <span className="text-[#2F6B57] font-medium flex items-center gap-1.5">
+              <span className="text-[#2F6B57] font-semibold flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#2F6B57]" />
                 In Stock ({product.stock} units) · Ready for immediate dispatch
               </span>
@@ -342,17 +360,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
           {/* Micro trust icons */}
           <div className="pt-4 border-t border-[#E4E1DA] grid grid-cols-3 gap-2 text-center text-[11px] text-[#666B67]">
-            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1">
+            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1 shadow-2xs">
               <Truck className="w-4 h-4 text-[#123C35]" />
-              <span>Free Delivery</span>
+              <span className="font-semibold text-[#171A19]">Free Insured Delivery</span>
             </div>
-            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1">
+            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1 shadow-2xs">
               <ShieldCheck className="w-4 h-4 text-[#123C35]" />
-              <span>{product.warranty?.split(' ')[0] || '2-Year'} Warranty</span>
+              <span className="font-semibold text-[#171A19]">{product.warranty?.split(' ')[0] || '1-Year'} Brand Warranty</span>
             </div>
-            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1">
+            <div className="p-2 bg-[#FFFFFF] border border-[#E4E1DA] rounded-lg flex flex-col items-center gap-1 shadow-2xs">
               <RotateCcw className="w-4 h-4 text-[#123C35]" />
-              <span>30-Day Returns</span>
+              <span className="font-semibold text-[#171A19]">7-Day Replacement</span>
             </div>
           </div>
         </div>
@@ -449,19 +467,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <div>
                   <h4 className="font-semibold text-[#171A19] text-sm mb-1">Domestic Dispatch & Courier</h4>
                   <p className="text-[#666B67] leading-relaxed">
-                    {product.shippingInfo || 'All orders are securely packaged and dispatched via insured air courier within 24 hours of confirmation.'}
+                    {product.shippingInfo || 'All packages are packed in tamper-evident security cartons and dispatched via air courier within 24 hours of confirmation.'}
                   </p>
                 </div>
                 <div className="pt-3 border-t border-[#E4E1DA]">
-                  <h4 className="font-semibold text-[#171A19] text-sm mb-1">Nexora Hardware Warranty</h4>
+                  <h4 className="font-semibold text-[#171A19] text-sm mb-1">Official Brand Warranty</h4>
                   <p className="text-[#666B67] leading-relaxed">
-                    {product.warranty || 'Backed by a 2-Year International Hardware Warranty. Includes full replacement in case of manufacturing anomalies.'}
+                    {product.warranty || 'Backed by official manufacturer warranty serviceable across authorized service centers nationwide in India.'}
                   </p>
                 </div>
                 <div className="pt-3 border-t border-[#E4E1DA]">
-                  <h4 className="font-semibold text-[#171A19] text-sm mb-1">30-Day Hassle-Free Returns</h4>
+                  <h4 className="font-semibold text-[#171A19] text-sm mb-1">7-Day Replacement Policy</h4>
                   <p className="text-[#666B67] leading-relaxed">
-                    If you are not entirely satisfied with your item, request a pickup within 30 days of delivery in original packaging for a full refund.
+                    In the unlikely event of physical transit damage, defective hardware out of the box, or dead on arrival, claim an immediate replacement within 7 days of delivery.
                   </p>
                 </div>
               </div>
@@ -483,8 +501,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <span className="text-xs font-semibold uppercase tracking-wider text-[#123C35]">
                 Complete Your Setup
               </span>
-              <h3 className="text-2xl font-semibold text-[#171A19] tracking-tight mt-1">
-                Complementary Instruments
+              <h3 className="text-2xl font-bold text-[#171A19] tracking-tight mt-1">
+                Recommended in this Category
               </h3>
             </div>
             <button

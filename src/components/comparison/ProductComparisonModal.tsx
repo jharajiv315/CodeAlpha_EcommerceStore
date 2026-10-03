@@ -125,7 +125,7 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({
                 Product Comparison
               </h2>
               <p className="text-xs text-[#666B67]">
-                Side-by-side specifications, acoustic signatures, and engineering highlights ({compareProducts.length}/3 products selected)
+                Side-by-side technical specifications and hardware highlights ({compareProducts.length}/3 products selected)
               </p>
             </div>
           </div>
@@ -178,7 +178,7 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({
               <div className="max-w-md mx-auto">
                 <h3 className="text-base font-semibold text-[#171A19]">No products selected</h3>
                 <p className="text-xs text-[#666B67] mt-1">
-                  Choose up to 3 products across our catalog to inspect acoustic drivers, materials, and domestic warranties side-by-side.
+                  Choose up to 3 products across our catalog to inspect specifications, pricing, and warranty coverage side-by-side.
                 </p>
               </div>
               <button
@@ -310,7 +310,7 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({
                           </div>
                           <span className="text-xs font-semibold text-[#171A19]">Add Another Product</span>
                           <span className="text-[11px] text-[#666B67] mt-1 max-w-[140px]">
-                            Compare up to 3 instruments side-by-side
+                            Compare up to 3 products side-by-side
                           </span>
 
                           {/* Add Product Dropdown */}

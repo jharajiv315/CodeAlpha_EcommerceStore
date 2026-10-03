@@ -109,7 +109,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <ShoppingBag className="w-10 h-10 text-[#666B67]/50 mx-auto mb-3 stroke-[1.2]" />
                 <h4 className="text-sm font-semibold text-[#171A19]">Your bag is empty</h4>
                 <p className="text-xs text-[#666B67] mt-1 mb-6 max-w-xs mx-auto">
-                  Explore our curated collections of precision instruments and everyday essentials.
+                  Explore our curated catalog of smartphones, laptops, audio gear, and electronics.
                 </p>
                 <button
                   type="button"
@@ -119,7 +119,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   }}
                   className="px-5 py-2 bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
                 >
-                  Explore Collection
+                  Start Shopping
                 </button>
               </div>
             ) : (

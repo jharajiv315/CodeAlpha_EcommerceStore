@@ -42,11 +42,11 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
 
       <div className="pb-4 border-b border-[#E4E1DA] flex items-baseline justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-[#171A19] tracking-tight">
-            Saved Instruments
+          <h1 className="text-3xl font-bold text-[#171A19] tracking-tight">
+            Saved Items & Wishlist
           </h1>
           <p className="text-xs text-[#666B67] mt-1">
-            Curate and monitor availability of your prioritized workstation items.
+            Monitor prices, stock levels, and availability of your saved electronics.
           </p>
         </div>
         <span className="text-xs text-[#666B67] tabular-nums">

@@ -63,9 +63,9 @@ export const CartPage: React.FC<CartPageProps> = ({
         <Breadcrumb items={breadcrumbs} />
         <EmptyState
           icon={ShoppingBag}
-          title="Your shopping bag is empty"
-          description="Explore our collection of acoustic instruments, precision typing gear, and focused accessories."
-          actionLabel="Explore Collection"
+          title="Your shopping cart is empty"
+          description="Explore our collection of flagship smartphones, performance laptops, pro audio gear, and computing hardware."
+          actionLabel="Start Shopping"
           onAction={onNavigateShop}
         />
       </div>

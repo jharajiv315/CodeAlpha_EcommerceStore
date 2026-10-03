@@ -97,15 +97,15 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           <p className="text-xs text-[#666B67] leading-relaxed">
             {mode === 'login'
               ? 'Access past order receipts, stored destinations, and curated preferences.'
-              : 'Join Nexora to track shipments, save bespoke instruments, and enjoy expedited checkout.'}
+              : 'Join Nexora to track shipments, save items to your wishlist, and enjoy expedited checkout.'}
           </p>
         </div>
 
-        {/* Quick Demo Accounts Pill Bar for instant testing */}
+        {/* Quick Sample Account Bar */}
         <div className="p-3 bg-[#F7F5F0] border border-[#E4E1DA] rounded-xl text-xs space-y-2">
           <div className="flex items-center gap-1.5 text-[#123C35] font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>1-Click Test Credentials (Evaluator Demo):</span>
+            <span>Quick Sign In with Sample Account:</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             <button
