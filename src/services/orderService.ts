@@ -1,4 +1,5 @@
 import { apiRequest } from './apiClient';
+import { productService } from './productService';
 import { CartItem, CartSummary, DeliveryMethod, Order, PaymentMethod, ShippingAddress } from '../types';
 
 export interface CreateOrderPayload {
@@ -85,6 +86,9 @@ class OrderService {
       requiresAuth: true,
       body: JSON.stringify(requestBody),
     });
+
+    // Invalidate product catalog cache so inventory decrements are immediately reflected
+    productService.invalidateCache();
 
     return confirmedOrder;
   }

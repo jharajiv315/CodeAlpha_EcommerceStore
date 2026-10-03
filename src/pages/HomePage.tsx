@@ -44,11 +44,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      productService.getFeaturedProducts(),
-      productService.getNewArrivals(),
-      productService.getAllProducts(),
-    ]).then(([featured, arrivals, all]) => {
+    productService.getAllProducts().then((all) => {
+      const featured = all.filter(p => p.featured);
+      const arrivals = all.filter(p => p.newArrival);
       setFeaturedProducts(featured.slice(0, 4));
       setNewArrivals(arrivals.slice(0, 4));
       setTotalProducts(all.length);
@@ -161,11 +159,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </span>
                 </div>
 
-                <div
+                <button
+                  type="button"
                   onClick={() => {
                     if (spotlightProduct) onSelectProduct(spotlightProduct.id);
                   }}
-                  className="group/hero cursor-pointer py-4 flex flex-col items-center justify-center"
+                  className="group/hero cursor-pointer py-4 flex flex-col items-center justify-center w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#123C35] rounded-xl"
+                  aria-label={`View flagship spotlight: ${spotlightProduct?.name || 'Sony WH-1000XM5 Wireless Headphones'}`}
                 >
                   <div className="w-full aspect-square max-w-[280px] bg-[#FFFFFF] rounded-xl p-6 flex items-center justify-center border border-[#E4E1DA] group-hover/hero:border-[#123C35] transition-colors">
                     <img
@@ -174,6 +174,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80'
                       }
                       alt={spotlightProduct?.name || 'Flagship Electronics'}
+                      width={280}
+                      height={280}
                       className="w-full h-full object-contain transition-transform duration-300 group-hover/hero:scale-105"
                       loading="eager"
                     />
@@ -189,7 +191,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           {spotlightProduct ? formatPrice(spotlightProduct.price) : '₹27,990'}
                         </span>
                         {spotlightProduct?.originalPrice && (
-                          <span className="text-[10px] text-[#8C928D] line-through tabular-nums">
+                          <span className="text-[10px] text-[#5A625C] line-through tabular-nums">
                             {formatPrice(spotlightProduct.originalPrice)}
                           </span>
                         )}
@@ -199,7 +201,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       View →
                     </span>
                   </div>
-                </div>
+                </button>
 
                 <div className="pt-3 border-t border-[#E4E1DA] flex items-center justify-between text-[11px] text-[#666B67]">
                   <span>Ready for immediate dispatch</span>
@@ -252,7 +254,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </p>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-[#8C928D] pt-2 border-t border-[#E4E1DA]/60">
+              <div className="flex items-center justify-between text-xs text-[#5A625C] pt-2 border-t border-[#E4E1DA]/60">
                 <span>{count}</span>
                 <span className="font-bold text-[#123C35] opacity-0 group-hover:opacity-100 transition-opacity">
                   Browse →

@@ -177,7 +177,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                               className="w-full text-left py-2 px-2 text-xs font-medium text-[#4D524E] hover:text-[#123C35] hover:bg-[#F7F5F0] rounded transition-colors flex items-center justify-between cursor-pointer"
                             >
                               <span>{cat.label}</span>
-                              <ChevronRight className="w-3.5 h-3.5 text-[#8C928D]" />
+                              <ChevronRight className="w-3.5 h-3.5 text-[#5A625C]" />
                             </button>
                           ))}
                         </div>

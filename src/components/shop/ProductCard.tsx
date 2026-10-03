@@ -91,6 +91,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
         <img
           src={product.image}
           alt={product.name}
+          width={320}
+          height={320}
           loading="lazy"
           referrerPolicy="no-referrer"
           className="w-full h-full object-contain transition-transform duration-300 ease-out group-hover:scale-102"
@@ -114,7 +116,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
             <span className="font-bold uppercase tracking-wider text-[#123C35]">
               {product.brand || product.category}
             </span>
-            <span className="text-[11px] text-[#8C928D] truncate max-w-[120px]">
+            <span className="text-[11px] text-[#5A625C] truncate max-w-[120px]">
               {product.category}
             </span>
           </div>
@@ -130,7 +132,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
               <Star className="w-3.5 h-3.5 fill-current text-[#B89B5E]" />
               <span className="font-bold text-[#171A19]">{product.rating}</span>
             </div>
-            <span className="text-[#8C928D]">({product.reviewCount?.toLocaleString() || 0})</span>
+            <span className="text-[#5A625C]">({product.reviewCount?.toLocaleString() || 0})</span>
             {isLowStock && (
               <span className="text-[10px] font-semibold text-[#A67C35] ml-auto">
                 Only {product.stock} left
@@ -147,7 +149,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
               <>
-                <span className="text-xs text-[#8C928D] line-through tabular-nums">
+                <span className="text-xs text-[#5A625C] line-through tabular-nums">
                   {formatPrice(product.originalPrice)}
                 </span>
                 <span className="text-[11px] font-semibold text-[#2F6B57]">
@@ -166,10 +168,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
               justAdded
                 ? 'bg-[#2F6B57] text-[#FFFFFF]'
                 : isOutOfStock
-                ? 'bg-[#E4E1DA] text-[#8C928D] cursor-not-allowed'
+                ? 'bg-[#E4E1DA] text-[#5A625C] cursor-not-allowed'
                 : 'bg-[#123C35] hover:bg-[#0D302A] text-[#FFFFFF] shadow-xs active:scale-[0.99]'
             }`}
-            aria-label={`Add ${product.name} to cart`}
+            aria-label={
+              isOutOfStock
+                ? `${product.name} is out of stock`
+                : justAdded
+                ? `Added to Cart: ${product.name}`
+                : `Add to Cart: ${product.name}`
+            }
           >
             {justAdded ? (
               <>

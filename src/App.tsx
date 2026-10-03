@@ -11,18 +11,20 @@ import { ProductComparisonModal } from './components/comparison/ProductCompariso
 import { Footer } from './components/common/Footer';
 import { BackToTop } from './components/common/BackToTop';
 
-// Pages
+// Primary Immediate Pages
 import { HomePage } from './pages/HomePage';
 import { ShopPage } from './pages/ShopPage';
-import { ProductDetailPage } from './pages/ProductDetailPage';
-import { CartPage } from './pages/CartPage';
-import { CheckoutPage } from './pages/CheckoutPage';
-import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
-import { OrdersPage } from './pages/OrdersPage';
-import { AuthPage } from './pages/AuthPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { WishlistPage } from './pages/WishlistPage';
-import { NotFoundPage } from './pages/NotFoundPage';
+
+// Code-split Secondary Routes for Optimal Initial Bundle Performance
+const ProductDetailPage = React.lazy(() => import('./pages/ProductDetailPage').then(m => ({ default: m.ProductDetailPage })));
+const CartPage = React.lazy(() => import('./pages/CartPage').then(m => ({ default: m.CartPage })));
+const CheckoutPage = React.lazy(() => import('./pages/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
+const OrderConfirmationPage = React.lazy(() => import('./pages/OrderConfirmationPage').then(m => ({ default: m.OrderConfirmationPage })));
+const OrdersPage = React.lazy(() => import('./pages/OrdersPage').then(m => ({ default: m.OrdersPage })));
+const AuthPage = React.lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const ProfilePage = React.lazy(() => import('./pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const WishlistPage = React.lazy(() => import('./pages/WishlistPage').then(m => ({ default: m.WishlistPage })));
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 import { Order, ProductCategory } from './types';
 import { orderService } from './services/orderService';
@@ -162,97 +164,106 @@ function AppShell() {
           />
         )}
 
-        {route === 'product' && selectedProductId && (
-          <ProductDetailPage
-            productId={selectedProductId}
-            onNavigateHome={() => navigate('home')}
-            onNavigateShop={(cat) => navigate('shop', cat)}
-            onSelectProduct={handleSelectProduct}
-            onNavigateCheckout={() => navigate('checkout')}
-          />
-        )}
+        <React.Suspense
+          fallback={
+            <div className="min-h-[50vh] flex items-center justify-center text-xs font-semibold text-[#5A625C] gap-2">
+              <div className="w-4 h-4 border-2 border-[#123C35] border-t-transparent rounded-full animate-spin" />
+              <span>Loading...</span>
+            </div>
+          }
+        >
+          {route === 'product' && selectedProductId && (
+            <ProductDetailPage
+              productId={selectedProductId}
+              onNavigateHome={() => navigate('home')}
+              onNavigateShop={(cat) => navigate('shop', cat)}
+              onSelectProduct={handleSelectProduct}
+              onNavigateCheckout={() => navigate('checkout')}
+            />
+          )}
 
-        {route === 'cart' && (
-          <CartPage
-            onNavigateHome={() => navigate('home')}
-            onNavigateShop={() => navigate('shop')}
-            onNavigateCheckout={() => navigate('checkout')}
-            onSelectProduct={handleSelectProduct}
-          />
-        )}
+          {route === 'cart' && (
+            <CartPage
+              onNavigateHome={() => navigate('home')}
+              onNavigateShop={() => navigate('shop')}
+              onNavigateCheckout={() => navigate('checkout')}
+              onSelectProduct={handleSelectProduct}
+            />
+          )}
 
-        {route === 'checkout' && (
-          <CheckoutPage
-            onNavigateHome={() => navigate('home')}
-            onNavigateCart={() => navigate('cart')}
-            onOrderSuccess={handleOrderSuccess}
-          />
-        )}
+          {route === 'checkout' && (
+            <CheckoutPage
+              onNavigateHome={() => navigate('home')}
+              onNavigateCart={() => navigate('cart')}
+              onOrderSuccess={handleOrderSuccess}
+            />
+          )}
 
-        {route === 'order-confirmation' && confirmedOrder && (
-          <OrderConfirmationPage
-            order={confirmedOrder}
-            onNavigateOrders={() => navigate('orders')}
-            onNavigateHome={() => navigate('home')}
-          />
-        )}
+          {route === 'order-confirmation' && confirmedOrder && (
+            <OrderConfirmationPage
+              order={confirmedOrder}
+              onNavigateOrders={() => navigate('orders')}
+              onNavigateHome={() => navigate('home')}
+            />
+          )}
 
-        {route === 'orders' && (
-          <OrdersPage
-            onNavigateHome={() => navigate('home')}
-            onNavigateShop={() => navigate('shop')}
-            onSelectProduct={handleSelectProduct}
-          />
-        )}
+          {route === 'orders' && (
+            <OrdersPage
+              onNavigateHome={() => navigate('home')}
+              onNavigateShop={() => navigate('shop')}
+              onSelectProduct={handleSelectProduct}
+            />
+          )}
 
-        {route === 'auth' && (
-          <AuthPage
-            onNavigateHome={() => navigate('home')}
-            onAuthSuccess={() => {
-              if (cart.length > 0) {
-                navigate('checkout');
-              } else {
-                navigate('profile');
-              }
-            }}
-          />
-        )}
+          {route === 'auth' && (
+            <AuthPage
+              onNavigateHome={() => navigate('home')}
+              onAuthSuccess={() => {
+                if (cart.length > 0) {
+                  navigate('checkout');
+                } else {
+                  navigate('profile');
+                }
+              }}
+            />
+          )}
 
-        {route === 'profile' && (
-          <ProfilePage
-            onNavigateHome={() => navigate('home')}
-            onNavigateOrders={() => navigate('orders')}
-            onNavigateWishlist={() => navigate('wishlist')}
-            onNavigateShop={() => navigate('shop')}
-            onLoggedOut={() => navigate('home')}
-          />
-        )}
+          {route === 'profile' && (
+            <ProfilePage
+              onNavigateHome={() => navigate('home')}
+              onNavigateOrders={() => navigate('orders')}
+              onNavigateWishlist={() => navigate('wishlist')}
+              onNavigateShop={() => navigate('shop')}
+              onLoggedOut={() => navigate('home')}
+            />
+          )}
 
-        {route === 'wishlist' && (
-          <WishlistPage
-            onNavigateHome={() => navigate('home')}
-            onNavigateShop={() => navigate('shop')}
-            onSelectProduct={handleSelectProduct}
-          />
-        )}
+          {route === 'wishlist' && (
+            <WishlistPage
+              onNavigateHome={() => navigate('home')}
+              onNavigateShop={() => navigate('shop')}
+              onSelectProduct={handleSelectProduct}
+            />
+          )}
 
-        {![
-          'home',
-          'shop',
-          'product',
-          'cart',
-          'checkout',
-          'order-confirmation',
-          'orders',
-          'auth',
-          'profile',
-          'wishlist',
-        ].includes(route) && (
-          <NotFoundPage
-            onNavigateHome={() => navigate('home')}
-            onNavigateShop={() => navigate('shop')}
-          />
-        )}
+          {![
+            'home',
+            'shop',
+            'product',
+            'cart',
+            'checkout',
+            'order-confirmation',
+            'orders',
+            'auth',
+            'profile',
+            'wishlist',
+          ].includes(route) && (
+            <NotFoundPage
+              onNavigateHome={() => navigate('home')}
+              onNavigateShop={() => navigate('shop')}
+            />
+          )}
+        </React.Suspense>
       </main>
 
       {/* Slide-over Quick Cart Drawer */}

@@ -19,28 +19,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="flex items-start gap-3">
             <Truck className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
-              <h5 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Express Courier</h5>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Express Courier</h3>
               <p className="text-xs text-[#A8AEA9] mt-1 leading-relaxed">Insured air dispatch within 24 hours across India.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
-              <h5 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Secure Payments</h5>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Secure Payments</h3>
               <p className="text-xs text-[#A8AEA9] mt-1 leading-relaxed">UPI, Cards, Net Banking & Cash on Delivery.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <RotateCcw className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
-              <h5 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">7-Day Replacement</h5>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">7-Day Replacement</h3>
               <p className="text-xs text-[#A8AEA9] mt-1 leading-relaxed">Immediate replacement for transit or hardware defects.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Award className="w-5 h-5 text-[#B89B5E] shrink-0 mt-0.5" />
             <div>
-              <h5 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Official Warranty</h5>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#F7F5F0]">Official Warranty</h3>
               <p className="text-xs text-[#A8AEA9] mt-1 leading-relaxed">Authorized brand warranty on all electronics.</p>
             </div>
           </div>
@@ -72,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Shop Departments */}
           <div className="space-y-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Shop Catalog</h5>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Shop Catalog</h3>
             <ul className="space-y-2 text-xs text-[#A8AEA9]">
               <li>
                 <button
@@ -142,7 +142,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Customer Care & Orders */}
           <div className="space-y-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Customer Care</h5>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Customer Care</h3>
             <ul className="space-y-2 text-xs text-[#A8AEA9]">
               <li>
                 <button
@@ -185,7 +185,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Payment & Security Trust */}
           <div className="space-y-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Accepted Payments</h5>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#B89B5E]">Accepted Payments</h3>
             <div className="space-y-2 text-xs text-[#A8AEA9] leading-relaxed">
               <p>Supported payment options at checkout:</p>
               <div className="flex flex-wrap gap-1.5 pt-1">
@@ -198,7 +198,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   </span>
                 ))}
               </div>
-              <p className="text-[11px] text-[#8C928D] pt-2">
+              <p className="text-[11px] text-[#A8AEA9] pt-2">
                 256-bit encrypted checkout with verified Indian banking gateways.
               </p>
             </div>
@@ -206,7 +206,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         {/* Bottom Copyright & Localization */}
-        <div className="mt-12 pt-8 border-t border-[#2A2F2D] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#666B67]">
+        <div className="mt-12 pt-8 border-t border-[#2A2F2D] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A8AEA9]">
           <p>© 2026 NEXORA Electronics Ltd. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span>GST Registered</span>

@@ -72,6 +72,17 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!supportModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSupportModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [supportModalOpen]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const query = searchQuery.trim();
@@ -238,15 +249,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search phones, laptops, headphones, OLED, RTX..."
-                className="w-full bg-[#F7F5F0] hover:bg-[#F2EEE6] focus:bg-[#FFFFFF] text-[#171A19] placeholder-[#8C928D] text-xs font-medium pl-10 pr-10 py-2.5 rounded-lg border border-[#E4E1DA] focus:border-[#123C35] focus:outline-none transition-all shadow-xs"
+                className="w-full bg-[#F7F5F0] hover:bg-[#F2EEE6] focus:bg-[#FFFFFF] text-[#171A19] placeholder-[#5A625C] text-xs font-medium pl-10 pr-10 py-2.5 rounded-lg border border-[#E4E1DA] focus:border-[#123C35] focus:outline-none transition-all shadow-xs"
                 aria-label="Search electronics products"
               />
-              <Search className="w-4 h-4 text-[#8C928D] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-[#5A625C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C928D] hover:text-[#171A19] p-0.5 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A625C] hover:text-[#171A19] p-0.5 cursor-pointer"
                   aria-label="Clear search"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -337,14 +348,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search phones, laptops, audio..."
-                className="w-full bg-[#F7F5F0] text-[#171A19] placeholder-[#8C928D] text-xs font-medium pl-9 pr-8 py-2.5 rounded-lg border border-[#E4E1DA] focus:border-[#123C35] focus:outline-none"
+                className="w-full bg-[#F7F5F0] text-[#171A19] placeholder-[#5A625C] text-xs font-medium pl-9 pr-8 py-2.5 rounded-lg border border-[#E4E1DA] focus:border-[#123C35] focus:outline-none"
               />
-              <Search className="w-4 h-4 text-[#8C928D] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-[#5A625C] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C928D]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A625C]"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>

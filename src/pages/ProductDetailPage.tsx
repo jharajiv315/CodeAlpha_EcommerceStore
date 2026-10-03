@@ -122,8 +122,42 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     { label: product.name, active: true },
   ];
 
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: [product.image, ...(product.gallery || [])],
+    description: product.description || product.tagline,
+    sku: product.sku || product.id,
+    brand: {
+      '@type': 'Brand',
+      name: product.brand || product.category,
+    },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'INR',
+      price: product.price,
+      itemCondition: 'https://schema.org/NewCondition',
+      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: typeof window !== 'undefined' ? window.location.href : '',
+    },
+    ...(product.reviewCount && product.reviewCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating,
+            reviewCount: product.reviewCount,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       {/* Breadcrumb */}
       <Breadcrumb items={breadcrumbs} />
 
@@ -154,6 +188,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <img
               src={selectedImage || product.image}
               alt={product.name}
+              width={600}
+              height={440}
               className="w-full h-full object-contain max-h-[440px] transition-all duration-300"
             />
           </div>
@@ -190,7 +226,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {product.brand || product.category}
                 </span>
                 {product.sku && (
-                  <span className="text-[11px] font-mono text-[#8C928D]">
+                  <span className="text-[11px] font-mono text-[#5A625C]">
                     SKU: {product.sku}
                   </span>
                 )}
@@ -228,7 +264,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <>
-                  <span className="text-base text-[#8C928D] line-through tabular-nums">
+                  <span className="text-base text-[#5A625C] line-through tabular-nums">
                     {formatPrice(product.originalPrice)}
                   </span>
                   <span className="text-xs font-bold text-[#2F6B57] bg-[#EDE4D2] px-2 py-0.5 rounded">

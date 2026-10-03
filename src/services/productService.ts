@@ -8,12 +8,30 @@ import { INITIAL_PRODUCTS } from '../data/products';
  * with defensive fallback to offline initial data if network is unavailable.
  */
 class ProductService {
+  private allProductsCache: { data: Product[]; expiresAt: number } | null = null;
+  private productCache = new Map<string, { data: Product; expiresAt: number }>();
+  private readonly CACHE_TTL_MS = 60 * 1000; // 60 seconds
+
+  /**
+   * Clears internal memory cache when stock or orders change
+   */
+  invalidateCache(): void {
+    this.allProductsCache = null;
+    this.productCache.clear();
+  }
+
   /**
    * Retrieves all products from PostgreSQL database
    */
   async getAllProducts(): Promise<Product[]> {
+    const now = Date.now();
+    if (this.allProductsCache && this.allProductsCache.expiresAt > now) {
+      return this.allProductsCache.data;
+    }
+
     try {
       const res = await apiRequest<{ products: Product[]; total: number }>('/products?limit=150');
+      this.allProductsCache = { data: res.products, expiresAt: now + this.CACHE_TTL_MS };
       return res.products;
     } catch (err) {
       console.warn('[ProductService] Backend offline, using local fallback:', err);
@@ -25,8 +43,16 @@ class ProductService {
    * Retrieves a single product by ID
    */
   async getProductById(id: string): Promise<Product | null> {
+    const now = Date.now();
+    const cached = this.productCache.get(id);
+    if (cached && cached.expiresAt > now) {
+      return cached.data;
+    }
+
     try {
-      return await apiRequest<Product>(`/products/${id}`);
+      const product = await apiRequest<Product>(`/products/${id}`);
+      this.productCache.set(id, { data: product, expiresAt: now + this.CACHE_TTL_MS });
+      return product;
     } catch (err: any) {
       if (err.statusCode === 404) return null;
       console.warn('[ProductService] Fetch failed, checking local data:', err);
